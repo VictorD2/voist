@@ -1,4 +1,4 @@
-import { ItemGroupType } from "../layout/UserLayout/Sidebar/ItemGroup/ItemGroup.type";
+import { ItemGroupType } from "@/app/(pages)/(user)/(layout)/Sidebar/ItemGroup/ItemGroup.type";
 import pathsRouter from "./paths";
 
 export const paths: Array<ItemGroupType> = [
