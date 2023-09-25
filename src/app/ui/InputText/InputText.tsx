@@ -1,3 +1,4 @@
+"use client";
 import { FC, useState } from "react";
 //** Types */
 import { InputTextProps } from "./InputText.type";

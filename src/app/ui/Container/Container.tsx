@@ -20,6 +20,7 @@ const Container: React.FC<ContainerProps> = (props) => {
     shadow = {},
     separator = {},
     size = {},
+    transition = false,
     ...rest
   } = props;
 
@@ -56,6 +57,7 @@ const Container: React.FC<ContainerProps> = (props) => {
         size.minHeight,
         size.width,
         size.minWidth,
+        transition ? "transition-all duration-500" : "",
         rounded
       )}
       {...rest}

@@ -5,7 +5,6 @@ import ItemGroup from "./ItemGroup";
 import { ItemGroupType } from "./ItemGroup/ItemGroup.type";
 import { SidebarProps } from "./Sidebar.type";
 import styles from "./Sidebar.module.css";
-import Icon from "@/app/ui/Icon";
 import logo from "@/app/shared/assets/img/logo.png";
 import logoCorto from "@/app/shared/assets/img/logo-corto.png";
 import { classNames } from "@/app/shared/utils/helpers";

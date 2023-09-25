@@ -34,4 +34,5 @@ export interface ContainerProps extends HTMLAttributes<HTMLElement> {
   separator?: SeparatorType;
   shadow?: ShadowType;
   size?: SizeType;
+  transition?: boolean;
 }

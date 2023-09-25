@@ -58,6 +58,7 @@ const RegisterPage: NextPage = () => {
             }}
           />
           <Container
+            className="overflow-hidden"
             position="relative"
             size={{ width: "w-full", height: "h-[35rem]" }}
             separator={{ padding: "lg:p-20 px-4 py-10" }}

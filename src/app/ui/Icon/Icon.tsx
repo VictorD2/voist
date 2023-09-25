@@ -1,3 +1,4 @@
+"use client";
 import { classNames, mergeObjects } from "../../shared/utils/helpers";
 import Container from "../Container";
 import { defaultFont, defaultSize } from "./Icon.default";

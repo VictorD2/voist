@@ -1,3 +1,4 @@
+"use client";
 import { ButtonProps } from "./Button.type";
 import styles from "./Button.module.css";
 import { classNames, mergeObjects } from "../../shared/utils/helpers";

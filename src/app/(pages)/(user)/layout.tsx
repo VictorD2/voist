@@ -63,7 +63,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
             as="main"
             size={{
               width: "w-full",
-              minHeight: "min-h-[calc(100vh-7rem)]",
+              minHeight: "min-h-[calc(100vh-4rem)]",
             }}
             separator={{ padding: "px-5 py-6" }}
             bgColor="bg-background"
