@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/google-font-display */
 "use client";
 
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -6,7 +7,13 @@ import Container from "./ui/Container";
 // import { Next13NProgress } from 'nextjs13-progress';
 import "./styles/globals.css";
 import "remixicon/fonts/remixicon.css";
-import Head from "next/head";
+import { Quicksand } from "next/font/google";
+
+// If loading a variable font, you don't need to specify the font weight
+const inter = Quicksand({
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export default function RootLayout({
   children,
@@ -26,19 +33,11 @@ export default function RootLayout({
 
   return (
     <html lang="es">
-      <head>
-        <link
-          href="https://fonts.googleapis.com/css?family=Quicksand"
-          rel="stylesheet"
-        ></link>
-      </head>
       <QueryClientProvider client={queryClient}>
         <GlobalProvider>
-          {/* <ProgressBar shallowRouting color="#33435A" /> */}
-          <Container as="body">
-            <Container as="main">{children}</Container>
+          <Container as="body" className={inter.className}>
+            {children}
           </Container>
-          {/* <Next13NProgress color="red" height={5} /> */}
         </GlobalProvider>
       </QueryClientProvider>
     </html>
