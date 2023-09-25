@@ -19,11 +19,11 @@ const ProtectedRoutes = ({
     loading: { isLoading },
   } = useGlobalContext();
 
-  // useEffect(() => {
-  //   if (!isAuthenticated) router.push("/login");
-  // }, [isAuthenticated]);
+  useEffect(() => {
+    if (!isAuthenticated) router.push("/login");
+  }, [isAuthenticated]);
 
-  if (!isAuthenticated) router.push("/login");
+  // if (!isAuthenticated) router.push("/login");
 
   if (isLoading) return <Loading />;
   return <>{children}</>;
