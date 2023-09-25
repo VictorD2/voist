@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: "Quicksand";
+}
+
+.animation-flip {
+  transform: rotateY(180deg);
+  transition: all 0.5s;
+}
+.animation-flip-back {
+  transform: rotateY(0deg);
+  transition: all 0.5s;
+}
+
