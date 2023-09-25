@@ -12,7 +12,7 @@ const Icon: React.FC<IconProps> = (props) => {
   return (
     <Container
       as="i"
-      className={classNames(remixicon, className, "align-middle before:h-full")}
+      className={classNames(remixicon, className, "align-middle")}
       font={fontStyle}
       size={sizeStyle}
       {...rest}
