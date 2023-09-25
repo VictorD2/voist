@@ -6,13 +6,6 @@ export const paths: Array<ItemGroupType> = [
     separator: "",
     items: [
       {
-        slug: "Mi Perfil",
-        link: pathsRouter.perfil,
-        remixicon: "ri-user-line",
-        code: "P01",
-        children: [],
-      },
-      {
         slug: "Mi unidad",
         link: pathsRouter.mySpace,
         remixicon: "ri-home-5-line",
