@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import { HeaderProps } from "./Header.type";
 import Container from "@/app/ui/Container";
 import { classNames } from "@/app/shared/utils/helpers";
+import MenuProfile from "./MenuProfile";
 
 const Header: FC<HeaderProps> = (props) => {
   const { expand, setExpand } = props;
@@ -53,7 +54,9 @@ const Header: FC<HeaderProps> = (props) => {
         separator={{
           padding: "pr-4",
         }}
-      ></Container>
+      >
+        <MenuProfile />
+      </Container>
     </Container>
   );
 };

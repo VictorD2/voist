@@ -8,8 +8,11 @@ import Breadcrumbs from "@/app/ui/Breadcrumbs";
 import InputText from "@/app/ui/InputText";
 import Container from "@/app/ui/Container";
 import Button from "@/app/ui/Button";
+import { useState } from "react";
 
 const ClassesPage: NextPage = () => {
+  const [isActived, setIsActived] = useState<boolean>(false);
+
   return (
     <ProtectedRoutes>
       <Container
@@ -51,7 +54,10 @@ const ClassesPage: NextPage = () => {
           text="Nuevo"
           remixicon="ri-add-line"
           size={{ width: "" }}
-          bgColor="bg-white"
+          font={{ color: "group-hover:text-white text-black" }}
+          transition
+          className="group"
+          bgColor="bg-white hover:bg-primary"
           border={{ size: "border", color: "border-gray-200" }}
         />
         <Button
@@ -66,6 +72,10 @@ const ClassesPage: NextPage = () => {
           ripples={false}
           text="Ordenar por más recientes"
           size={{ width: "" }}
+          toggle={isActived}
+          onClick={() => {
+            setIsActived((state) => !state);
+          }}
           remixicon="ri-sort-desc"
           bgColor="bg-white"
           border={{ size: "border", color: "border-gray-200" }}

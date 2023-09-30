@@ -1,8 +1,13 @@
 import { MouseEventHandler } from "react";
 import {
+  AlignType,
   BackgroundColorType,
   BorderType,
+  DisplayType,
+  FlexDirectionType,
+  FlexWrapType,
   FontType,
+  GapType,
   JustifyType,
   RoundedType,
   SeparatorType,
@@ -21,9 +26,15 @@ export interface ButtonProps
   separator?: SeparatorType;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   remixicon?: string;
+  transition?: Boolean;
   trailRemixicon?: string;
   ripples?: boolean;
+  gap?: GapType;
   rounded?: RoundedType;
+  flexDirection?: FlexDirectionType;
+  flexWrap?: FlexWrapType;
+  align?: AlignType;
+  display?: DisplayType;
   shadow?: ShadowType;
   text?: string;
   textLoading?: string;

@@ -9,8 +9,11 @@ import FileFolder from "./FileFolder";
 import InputText from "@/app/ui/InputText";
 import Breadcrumbs from "@/app/ui/Breadcrumbs";
 import paths from "@/app/shared/routes/paths";
+import { useState } from "react";
 
 const MySpacePage: NextPage = () => {
+  const [isActived, setIsActived] = useState<boolean>(false);
+
   return (
     <ProtectedRoutes>
       <Container
@@ -52,7 +55,10 @@ const MySpacePage: NextPage = () => {
           text="Nuevo"
           remixicon="ri-add-line"
           size={{ width: "" }}
-          bgColor="bg-white"
+          font={{ color: "group-hover:text-white text-black" }}
+          transition
+          className="group"
+          bgColor="bg-white hover:bg-primary"
           border={{ size: "border", color: "border-gray-200" }}
         />
         <Button
@@ -67,6 +73,10 @@ const MySpacePage: NextPage = () => {
           ripples={false}
           text="Ordenar por más recientes"
           size={{ width: "" }}
+          toggle={isActived}
+          onClick={() => {
+            setIsActived((state) => !state);
+          }}
           remixicon="ri-sort-desc"
           bgColor="bg-white"
           border={{ size: "border", color: "border-gray-200" }}

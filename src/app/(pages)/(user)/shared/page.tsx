@@ -8,8 +8,11 @@ import FileFolder from "../my-space/FileFolder";
 import folderFileList from "./fileFolderList.json";
 import paths from "@/app/shared/routes/paths";
 import Breadcrumbs from "@/app/ui/Breadcrumbs";
+import { useState } from "react";
 
 const SharedPage: NextPage = () => {
+  const [isActived, setIsActived] = useState<boolean>(false);
+
   return (
     <ProtectedRoutes>
       <Container
@@ -56,10 +59,14 @@ const SharedPage: NextPage = () => {
           bgColor="bg-white"
           border={{ size: "border", color: "border-gray-200" }}
         />
-        <Button
+      <Button
           ripples={false}
           text="Ordenar por más recientes"
           size={{ width: "" }}
+          toggle={isActived}
+          onClick={() => {
+            setIsActived((state) => !state);
+          }}
           remixicon="ri-sort-desc"
           bgColor="bg-white"
           border={{ size: "border", color: "border-gray-200" }}

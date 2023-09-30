@@ -18,20 +18,26 @@ const Button: React.FC<ButtonProps> = (props) => {
     justify = "justify-center",
     bgColor = "bg-primary",
     rounded = "rounded-md",
+    align = "items-center",
+    display = "flex",
+    flexDirection = "flex-row",
     border = {},
     type = "button",
     className = "",
     ripples = true,
+    flexWrap = "flex-nowrap",
     toggle = false,
     size = {},
     separator = {},
     font = {},
     shadow = {},
     textLoading,
+    gap = "gap-1",
     remixicon,
     trailRemixicon,
     responsible = false,
     disabled,
+    transition = false,
     loading,
     onClick,
     text,
@@ -72,12 +78,18 @@ const Button: React.FC<ButtonProps> = (props) => {
   return (
     <button
       className={classNames(
-        "flex items-center flex-row flex-nowrap gap-1 transition-all duration-500 relative overflow-hidden",
+        "transition-all duration-500 relative overflow-hidden",
+        transition ? "transition-all duration-500" : "",
         disabled
           ? "bg-opacity-80 text-opacity-80 cursor-not-allowed"
           : "hover:opacity-70 ",
         toggle ? "shadow-inner shadow-secondary" : "",
         bgColor,
+        display,
+        align,
+        flexDirection,
+        flexWrap,
+        gap,
         borderStyle.size,
         borderStyle.color,
         fontStyle.color,
@@ -121,7 +133,7 @@ const Button: React.FC<ButtonProps> = (props) => {
             <Container
               display={classNames(!responsible ? "" : "lg:flex md:flex hidden")}
               as="span"
-             font={fontStyle} 
+              font={fontStyle}
             >
               {textLoading}
             </Container>
