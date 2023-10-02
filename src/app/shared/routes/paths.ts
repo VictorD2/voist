@@ -6,4 +6,5 @@ export default {
   classes: "/classes",
   shared: "/shared",
   contacts: "/contacts",
+  class: (id: string) => `/classes/${id}`,
 };

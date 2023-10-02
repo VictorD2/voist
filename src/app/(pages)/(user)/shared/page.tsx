@@ -1,5 +1,4 @@
 "use client";
-import ProtectedRoutes from "@/app/shared/routes/ProtectedRoutes";
 import Button from "@/app/ui/Button";
 import Container from "@/app/ui/Container";
 import InputText from "@/app/ui/InputText";
@@ -14,7 +13,7 @@ const SharedPage: NextPage = () => {
   const [isActived, setIsActived] = useState<boolean>(false);
 
   return (
-    <ProtectedRoutes>
+    <>
       <Container
         size={{ width: "w-full" }}
         display="flex"
@@ -59,7 +58,7 @@ const SharedPage: NextPage = () => {
           bgColor="bg-white"
           border={{ size: "border", color: "border-gray-200" }}
         />
-      <Button
+        <Button
           ripples={false}
           text="Ordenar por más recientes"
           size={{ width: "" }}
@@ -86,7 +85,7 @@ const SharedPage: NextPage = () => {
           return <FileFolder {...item} key={item.id + item.title} />;
         })}
       </Container>
-    </ProtectedRoutes>
+    </>
   );
 };
 

@@ -1,14 +1,51 @@
 "use client";
 
 import Container from "@/app/ui/Container";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { FileFolderProps } from "./FileFolder.type";
 import Icon from "@/app/ui/Icon";
 import Text from "@/app/ui/Text";
 import moment from "moment";
+import DropdownMenu from "@/app/ui/DropdownMenu";
+import { ButtonProps } from "@/app/ui/Button/Button.type";
+import Item from "@/app/ui/DropdownMenu/Item";
+import { useRouter } from "next/navigation";
+import paths from "@/app/shared/routes/paths";
 
 const FileFolder: FC<FileFolderProps> = (props) => {
   const { id, title, updatedAt, isFile } = props;
+
+  const menuOptionsItems: Array<ButtonProps> = [
+    {
+      text: "Ver detalle",
+      font: {
+        size: "text-sm",
+      },
+    },
+    {
+      text: "Editar Configuración",
+      font: {
+        size: "text-sm",
+      },
+      // onClick: handleOpenModalCreate,
+    },
+    {
+      text: "Eliminar",
+      bgColor: "bg-red-400 hover:bg-red-500",
+      font: {
+        size: "text-sm",
+        color: "text-white",
+      },
+      // onClick: handleOpenModalCreate,
+    },
+  ];
+
+  const router = useRouter();
+
+  const handleClickFileFolder = () => {
+    if (isFile) router.push(paths.class(String(id)));
+  };
+
   return (
     <Container
       size={{ width: "lg:w-80 md:w-80 w-full" }}
@@ -22,7 +59,7 @@ const FileFolder: FC<FileFolderProps> = (props) => {
       transition
       bgColor="hover:bg-gray-300 bg-gray-200"
     >
-      <Container>
+      <Container onClick={handleClickFileFolder} className="cursor-pointer">
         <Icon
           font={{
             color: isFile ? "text-primary" : "text-gray-500",
@@ -48,11 +85,23 @@ const FileFolder: FC<FileFolderProps> = (props) => {
           text={`Ult. act: ${moment(updatedAt).format("DD/MM/YYYY")}`}
         />
       </Container>
-      <Icon
-        className="cursor-pointer"
-        remixicon="ri-more-2-line"
-        font={{ size: "text-xl" }}
-      />
+
+      <DropdownMenu
+        bgColor="bg-transparent"
+        size={{ width: "w-44" }}
+        positionAbs="-top-1 -right-[10.7rem]"
+        buttonNode={
+          <Icon
+            className="cursor-pointer"
+            remixicon="ri-more-2-line"
+            font={{ size: "text-xl" }}
+          />
+        }
+      >
+        {menuOptionsItems.map((item, i) => {
+          return <Item {...item} key={"item-menu-options-" + i} gap="gap-2" />;
+        })}
+      </DropdownMenu>
     </Container>
   );
 };

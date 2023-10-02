@@ -3,7 +3,7 @@ import { ItemProps } from "./Item.type";
 import { Menu } from "@headlessui/react";
 import Button from "../../Button";
 import { classNames, mergeObjects } from "@/app/shared/utils/helpers";
-import { defaultFont, defaultSeparator } from "./Item.default";
+import { defaultBorder, defaultFont, defaultSeparator } from "./Item.default";
 
 const Item: FC<ItemProps> = (props) => {
   const {
@@ -16,12 +16,14 @@ const Item: FC<ItemProps> = (props) => {
     font = {},
     bgColor = "hover:bg-primary bg-white",
     className,
+    border = {},
     children,
     ...rest
   } = props;
 
   const fontStyle = mergeObjects(defaultFont, font);
   const separatorStyle = mergeObjects(defaultSeparator, separator);
+  const borderStyle = mergeObjects(defaultBorder, border);
 
   return (
     <Menu.Item>
@@ -35,6 +37,7 @@ const Item: FC<ItemProps> = (props) => {
           font={fontStyle}
           justify={justify}
           gap={gap}
+          border={borderStyle}
           rounded={rounded}
           separator={separatorStyle}
           {...rest}

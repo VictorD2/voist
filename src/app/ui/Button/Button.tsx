@@ -82,7 +82,7 @@ const Button: React.FC<ButtonProps> = (props) => {
         transition ? "transition-all duration-500" : "",
         disabled
           ? "bg-opacity-80 text-opacity-80 cursor-not-allowed"
-          : "hover:opacity-70 ",
+          : "",
         toggle ? "shadow-inner shadow-secondary" : "",
         bgColor,
         display,

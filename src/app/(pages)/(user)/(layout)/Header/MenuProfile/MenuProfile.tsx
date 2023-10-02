@@ -54,6 +54,10 @@ const MenuProfile = () => {
   return (
     <DropdownMenu
       bgColor="bg-transparent"
+      separator={{
+        margin: "mt-2",
+      }}
+      positionAbs="right-0"
       buttonNode={
         <>
           <Image

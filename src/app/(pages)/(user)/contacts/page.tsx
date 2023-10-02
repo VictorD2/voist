@@ -1,6 +1,5 @@
 "use client";
 
-import ProtectedRoutes from "@/app/shared/routes/ProtectedRoutes";
 import Container from "@/app/ui/Container";
 import InputText from "@/app/ui/InputText";
 import { NextPage } from "next";
@@ -11,7 +10,7 @@ import paths from "@/app/shared/routes/paths";
 
 const ContactsPage: NextPage = () => {
   return (
-    <ProtectedRoutes>
+    <>
       <Container
         size={{ width: "w-full" }}
         display="flex"
@@ -62,7 +61,7 @@ const ContactsPage: NextPage = () => {
           return <ContactCard key={item.id} {...item} />;
         })}
       </Container>
-    </ProtectedRoutes>
+    </>
   );
 };
 
