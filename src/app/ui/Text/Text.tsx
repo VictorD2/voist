@@ -34,6 +34,8 @@ const Text: React.FC<TextProps> = (props) => {
         sizeStyle.minHeight,
         sizeStyle.width,
         sizeStyle.minWidth,
+        sizeStyle.maxHeight,
+        sizeStyle.maxWidth,
         separatorStyle.margin,
         separatorStyle.padding,
         display

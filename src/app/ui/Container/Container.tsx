@@ -54,6 +54,8 @@ const Container: React.FC<ContainerProps> = (props) => {
         shadow.color,
         shadow.size,
         size.height,
+        size.maxHeight,
+        size.maxWidth,
         size.minHeight,
         size.width,
         size.minWidth,

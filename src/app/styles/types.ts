@@ -3326,6 +3326,8 @@ export type SizeType = {
   height?: HeigthType;
   minHeight?: MinHeightType;
   minWidth?: MinWidthType;
+  maxWidth?: MaxWidthType;
+  maxHeight?: MaxHeightType;
 };
 
 export type SeparatorType = {

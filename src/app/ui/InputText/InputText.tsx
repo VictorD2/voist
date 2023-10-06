@@ -32,6 +32,8 @@ const InputText: FC<InputTextProps> = (props) => {
     remixicon,
     responsiveIcon,
     eventResponsiveIcon,
+    floatIcon,
+    eventFloatIcon,
     disabled,
     required,
     rounded = "rounded",
@@ -47,6 +49,10 @@ const InputText: FC<InputTextProps> = (props) => {
 
   const handleEventResponsiveIcon = () => {
     if (eventResponsiveIcon) eventResponsiveIcon();
+  };
+
+  const handleEventFloatIcon = () => {
+    if (eventFloatIcon) eventFloatIcon();
   };
 
   const isHorizontal = orientation === "horizontal";
@@ -158,12 +164,24 @@ const InputText: FC<InputTextProps> = (props) => {
 
             {/* Responsive Icon */}
             {type !== "password" && (
-              <Icon
-                font={fontStyle}
-                remixicon={responsiveIcon ? responsiveIcon : ""}
-                onClick={handleEventResponsiveIcon}
-                className="w-1 absolute lg:hidden md:hidden my-auto top-[5px] right-6"
-              />
+              <>
+                {responsiveIcon && (
+                  <Icon
+                    font={fontStyle}
+                    remixicon={responsiveIcon ? responsiveIcon : ""}
+                    onClick={handleEventResponsiveIcon}
+                    className="w-1 absolute lg:hidden md:hidden my-auto top-[5px] right-6 cursor-pointer"
+                  />
+                )}
+                {floatIcon && (
+                  <Icon
+                    font={fontStyle}
+                    remixicon={floatIcon ? floatIcon : ""}
+                    onClick={handleEventFloatIcon}
+                    className="w-1 absolute my-auto top-[5px] right-6 cursor-pointer"
+                  />
+                )}
+              </>
             )}
 
             {/* Responsive Icon */}

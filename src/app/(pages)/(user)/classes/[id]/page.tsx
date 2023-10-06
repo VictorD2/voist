@@ -46,7 +46,9 @@ const ClassPage: NextPage = () => {
       >
         <Container
           separator={{ padding: "lg:px-30 md:px-10 px-0" }}
-          size={{ width: "lg:w-1/2 w-full" }}
+          size={{ width: "w-[35rem]" }}
+          display="flex"
+          flexDirection="flex-col"
         >
           <Container
             bgColor="bg-gray-200"
@@ -141,7 +143,7 @@ const ClassPage: NextPage = () => {
               </Container>
             </Container>
           </Container>
-          <Container separator={{ margin: "mt-10" }}>
+          <Container separator={{ margin: "my-10" }}>
             <Button
               toggle={mode === "SUMMARY"}
               onClick={handleChangeMode("SUMMARY")}
@@ -204,7 +206,7 @@ const ClassPage: NextPage = () => {
             />
           </Container>
         </Container>
-        <Container size={{ width: "lg:w-1/2 w-full" }}>
+        <Container size={{ width: "w-full" }}>
           {mode === "SUMMARY" && <Summary />}
           {mode === "TRANSCRIPTION" && <Transcription />}
           {mode === "CHAT" && <Chat />}

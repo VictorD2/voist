@@ -23,6 +23,8 @@ export interface InputTextProps
   shadow?: ShadowType;
   rounded?: RoundedType;
   font?: FontType;
+  floatIcon?: string;
+  eventFloatIcon?: () => void;
   size?: SizeType;
   separator?: SeparatorType;
 }
