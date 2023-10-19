@@ -1,8 +1,8 @@
-import { Fragment, useRef } from "react";
 import { Dialog, Transition } from "@headlessui/react";
+import { Fragment, useRef } from "react";
+import { classNames } from "../../shared/utils/helpers";
 import { ModalProps } from "./Modal.type";
 import Container from "../Container";
-import { classNames } from "../../shared/utils/helpers";
 
 const Modal: React.FC<ModalProps> = (props) => {
   const {

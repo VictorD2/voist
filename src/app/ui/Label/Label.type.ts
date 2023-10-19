@@ -3,10 +3,10 @@ import { ReactNode } from "react";
 
 export interface LabelProps
   extends React.LabelHTMLAttributes<HTMLLabelElement> {
-  className?: string;
   children?: ReactNode;
+  className?: string;
   font?: FontType;
-  text?: string;
-  size?: SizeType;
   separator?: SeparatorType;
+  size?: SizeType;
+  text?: string;
 }

@@ -1,19 +1,19 @@
 import { ElementType, HTMLAttributes, ReactNode } from "react";
 import {
-  AlignType,
   BackgroundColorType,
-  DisplayType,
   FlexDirectionType,
-  GapType,
-  JustifyType,
+  SeparatorType,
   FlexWrapType,
   PositionType,
+  DisplayType,
   RoundedType,
+  JustifyType,
   BorderType,
-  FontType,
-  SeparatorType,
   ShadowType,
+  AlignType,
   SizeType,
+  FontType,
+  GapType,
 } from "../../styles/types";
 
 export interface ContainerProps extends HTMLAttributes<HTMLElement> {

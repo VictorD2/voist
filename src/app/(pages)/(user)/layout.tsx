@@ -1,8 +1,8 @@
 "use client";
+import { ReactNode, useState } from "react";
 import ProtectedRoutes from "@/app/shared/routes/ProtectedRoutes";
 import { classNames } from "@/app/shared/utils/helpers";
 import Container from "@/app/ui/Container";
-import { ReactNode, useState } from "react";
 import Sidebar from "./(layout)/Sidebar";
 import Header from "./(layout)/Header";
 
@@ -18,11 +18,12 @@ const Layout = ({ children }: { children: ReactNode }) => {
           size={{ height: "h-screen" }}
           position="fixed"
           bgColor="bg-white"
+          transition
           className={classNames(
             expand
               ? "lg:w-[240px] lg:translate-x-0 -translate-x-[240px]"
-              : "lg:w-[80px] w-[240px] translate-x-[0px]",
-            "hover:md:w-[240px] transition-all duration-300 lg:translate-x-0 md:-translate-x-[240px]",
+              : "lg:w-[80px] md:translate-x-0 w-[240px] translate-x-[0px]",
+            "hover:md:w-[240px] lg:translate-x-0 md:-translate-x-[240px]",
             "lg:translate-y-0 translate-y-16",
             "group z-30"
           )}
@@ -40,7 +41,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
               ? "lg:pl-[240px] pl-[0px]"
               : "lg:pl-[80px] pl-[0px]",
           }}
-          className="transition-all duration-300"
+          transition
         >
           {/* Header */}
           <Container

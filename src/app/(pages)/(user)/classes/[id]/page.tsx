@@ -1,14 +1,14 @@
 "use client";
-import { NextPage } from "next";
-import paths from "@/app/shared/routes/paths";
-import Breadcrumbs from "@/app/ui/Breadcrumbs";
-import Container from "@/app/ui/Container";
 import { useState } from "react";
+import { NextPage } from "next";
+import Breadcrumbs from "@/app/ui/Breadcrumbs";
+import paths from "@/app/shared/routes/paths";
+import Transcription from "./Transcription";
+import Container from "@/app/ui/Container";
+import Button from "@/app/ui/Button";
+import Text from "@/app/ui/Text";
 import Summary from "./Summary";
 import Chat from "./Chat";
-import Transcription from "./Transcription";
-import Text from "@/app/ui/Text";
-import Button from "@/app/ui/Button";
 
 const ClassPage: NextPage = () => {
   type MODE = "SUMMARY" | "TRANSCRIPTION" | "CHAT";
@@ -16,7 +16,7 @@ const ClassPage: NextPage = () => {
   const [mode, setMode] = useState<MODE>("SUMMARY");
 
   const handleChangeMode = (mod: MODE) => {
-    return (e: React.MouseEvent) => {
+    return () => {
       setMode(mod);
     };
   };
@@ -24,11 +24,11 @@ const ClassPage: NextPage = () => {
   return (
     <Container>
       <Container
-        size={{ width: "w-full" }}
-        display="flex"
-        flexDirection="flex-col"
-        gap="gap-5"
         separator={{ margin: "mb-10" }}
+        size={{ width: "w-full" }}
+        flexDirection="flex-col"
+        display="flex"
+        gap="gap-5"
       >
         {/* Title */}
         <Breadcrumbs
@@ -47,33 +47,33 @@ const ClassPage: NextPage = () => {
         <Container
           separator={{ padding: "lg:px-30 md:px-10 px-0" }}
           size={{ width: "w-[35rem]" }}
-          display="flex"
           flexDirection="flex-col"
+          display="flex"
         >
           <Container
+            justify="justify-center"
+            flexDirection="flex-col"
             bgColor="bg-gray-200"
             rounded="rounded-2xl"
             display="inline-flex"
-            justify="justify-center"
             align="items-start"
-            flexDirection="flex-col"
             gap="gap-2"
             separator={{ padding: "p-8" }}
           >
             <Text
               text="Datos de la sesión:"
               font={{
+                weight: "font-semibold",
                 color: "text-primary",
                 size: "text-lg",
-                weight: "font-semibold",
               }}
             />
             <Container>
               <Text
                 text="Título: "
                 font={{
-                  size: "text-md",
                   weight: "font-semibold",
+                  size: "text-md",
                 }}
                 size={{ width: "" }}
                 display="inline"
@@ -88,8 +88,8 @@ const ClassPage: NextPage = () => {
               <Text
                 text="Fecha: "
                 font={{
-                  size: "text-md",
                   weight: "font-semibold",
+                  size: "text-md",
                 }}
                 size={{ width: "" }}
                 display="inline"
@@ -100,8 +100,8 @@ const ClassPage: NextPage = () => {
               <Text
                 text="Hora inicio: "
                 font={{
-                  size: "text-md",
                   weight: "font-semibold",
+                  size: "text-md",
                 }}
                 size={{ width: "" }}
                 display="inline"
@@ -112,8 +112,8 @@ const ClassPage: NextPage = () => {
               <Text
                 text="Hora fin: "
                 font={{
-                  size: "text-md",
                   weight: "font-semibold",
+                  size: "text-md",
                 }}
                 size={{ width: "" }}
                 display="inline"
@@ -124,8 +124,8 @@ const ClassPage: NextPage = () => {
               <Text
                 text="Personas con acceso:"
                 font={{
-                  size: "text-md",
                   weight: "font-semibold",
+                  size: "text-md",
                 }}
                 size={{ width: "" }}
                 display="inline"
@@ -165,44 +165,44 @@ const ClassPage: NextPage = () => {
               remixicon="ri-menu-line"
             />
             <Button
-              toggle={mode === "TRANSCRIPTION"}
               onClick={handleChangeMode("TRANSCRIPTION")}
-              className="group"
-              text="Transcripción"
-              bgColor="hover:bg-primary bg-white"
-              border={{
-                size: "border",
-                color: "border-gray-200",
-              }}
-              font={{
-                size: "text-lg",
-                color: "group-hover:text-white text-gray-900",
-              }}
-              rounded="rounded-lg"
-              gap="gap-5"
-              justify="justify-start"
-              size={{ width: "w-60" }}
               remixicon="ri-voice-recognition-line"
+              bgColor="hover:bg-primary bg-white"
+              toggle={mode === "TRANSCRIPTION"}
+              justify="justify-start"
+              text="Transcripción"
+              rounded="rounded-lg"
+              className="group"
+              gap="gap-5"
+              font={{
+                color: "group-hover:text-white text-gray-900",
+                size: "text-lg",
+              }}
+              border={{
+                color: "border-gray-200",
+                size: "border",
+              }}
+              size={{ width: "w-60" }}
             />
             <Button
-              toggle={mode === "CHAT"}
-              onClick={handleChangeMode("CHAT")}
-              className="group"
-              text="Chat IA"
               bgColor="hover:bg-primary bg-white"
-              border={{
-                size: "border",
-                color: "border-gray-200",
-              }}
-              font={{
-                size: "text-lg",
-                color: "group-hover:text-white text-gray-900",
-              }}
-              rounded="rounded-lg"
-              gap="gap-5"
+              onClick={handleChangeMode("CHAT")}
+              toggle={mode === "CHAT"}
               remixicon="ri-chat-3-line"
               justify="justify-start"
               size={{ width: "w-60" }}
+              rounded="rounded-lg"
+              className="group"
+              text="Chat IA"
+              gap="gap-5"
+              font={{
+                color: "group-hover:text-white text-gray-900",
+                size: "text-lg",
+              }}
+              border={{
+                color: "border-gray-200",
+                size: "border",
+              }}
             />
           </Container>
         </Container>

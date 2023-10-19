@@ -14,9 +14,9 @@ const Label: FC<LabelProps> = (props) => {
     ...rest
   } = props;
 
+  const separatorStyle = mergeObjects(defaultSeparator, separator);
   const fontStyle = mergeObjects(defaultFont, font);
   const sizeStyle = mergeObjects(defaultSize, size);
-  const separatorStyle = mergeObjects(defaultSeparator, separator);
 
   return (
     <label

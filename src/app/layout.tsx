@@ -1,13 +1,14 @@
 /* eslint-disable @next/next/google-font-display */
 "use client";
 
+import "react-toastify/dist/ReactToastify.css";
+import "remixicon/fonts/remixicon.css";
+import "./styles/globals.css";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ToastContainer } from "react-toastify";
+import { Quicksand } from "next/font/google";
 import { GlobalProvider } from "./shared/contexts/GlobalProvider";
 import Container from "./ui/Container";
-// import { Next13NProgress } from 'nextjs13-progress';
-import "./styles/globals.css";
-import "remixicon/fonts/remixicon.css";
-import { Quicksand } from "next/font/google";
 
 // If loading a variable font, you don't need to specify the font weight
 const inter = Quicksand({
@@ -36,6 +37,7 @@ export default function RootLayout({
       <QueryClientProvider client={queryClient}>
         <GlobalProvider>
           <Container as="body" className={inter.className}>
+            <ToastContainer />
             {children}
           </Container>
         </GlobalProvider>

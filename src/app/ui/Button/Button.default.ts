@@ -6,10 +6,12 @@ import {
   SizeType,
 } from "@/app/styles/types";
 
-export const defaultFont: FontType = {
-  color: "text-black",
-  size: "text-sm",
-  weight: "font-normal",
+export const defaultSeparator: SeparatorType = {
+  padding: "px-4",
+};
+
+export const defaultShadow: ShadowType = {
+  color: "",
 };
 
 export const defaultBorder: BorderType = {
@@ -17,12 +19,10 @@ export const defaultBorder: BorderType = {
   size: "border-0",
 };
 
-export const defaultSeparator: SeparatorType = {
-  padding: "px-4",
-};
-
-export const defaultShadow: ShadowType = {
-  color: "",
+export const defaultFont: FontType = {
+  color: "text-black",
+  size: "text-sm",
+  weight: "font-normal",
 };
 
 export const defaultSize: SizeType = {

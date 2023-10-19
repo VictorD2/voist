@@ -1,71 +1,138 @@
 "use client";
 
-import AuthRoutes from "@/app/shared/routes/AuthRoutes";
-import Container from "@/app/ui/Container";
+import { useForm, Controller } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { useMutation } from "react-query";
+import { toast } from "react-toastify";
 import { NextPage } from "next";
-import logo from "@/app/shared/assets/img/logo.png";
+import Image from "next/image";
+import { useGlobalContext } from "@/app/shared/contexts/GlobalProvider";
+import { getErrorResponse } from "@/app/shared/utils/helpers";
+import AuthRoutes from "@/app/shared/routes/AuthRoutes";
+import { RegisterType } from "./types/type";
+import Container from "@/app/ui/Container";
+import InputText from "@/app/ui/InputText";
+import Button from "@/app/ui/Button";
+import Text from "@/app/ui/Text";
 import person from "@/app/shared/assets/img/person.png";
 import laptop from "@/app/shared/assets/img/laptop.png";
 import donut from "@/app/shared/assets/img/donut.png";
-import Image from "next/image";
-import Text from "@/app/ui/Text";
-import InputText from "@/app/ui/InputText";
-import Button from "@/app/ui/Button";
-import { useGlobalContext } from "@/app/shared/contexts/GlobalProvider";
-import { useRouter } from "next/navigation";
+import logo from "@/app/shared/assets/img/logo.png";
+import {
+  LoginApiResponse,
+  registerService,
+} from "@/app/shared/services/auth.services";
+import paths from "@/app/shared/routes/paths";
 
 const RegisterPage: NextPage = () => {
+  const router = useRouter(); //ROUTER
+
+  // GLOBAL CONTEXT
   const {
     auth: { setIsAuthenticated },
+    user: { setUser },
   } = useGlobalContext();
 
-  const router = useRouter();
+  // FORM CONTROL
+  const {
+    control,
+    formState: { errors },
+    handleSubmit,
+    setError,
+    watch,
+  } = useForm<RegisterType>({
+    defaultValues: {
+      name: "",
+      lastname: "",
+      email: "",
+      password: "",
+      repeatPassword: "",
+    },
+  });
 
-  const handleSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsAuthenticated(true);
+  // GO TO LOGIN
+  const handleGoToLogin = () => router.push(paths.login);
+  const GoToRoot = () => router.push(paths.root);
+
+  // EVENT FOCUS INPUT
+  const handleInputFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    const name = e.target.name as keyof RegisterType;
+    setError(name, { message: "" });
   };
 
-  const handleGoToLogin = () => router.push("/login");
+  // SUBMIT FORM EVENT
+  const handleSubmitForm = (e: React.FormEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    if (watch("password") !== watch("repeatPassword"))
+      return toast.warning("Las contraseñas no coinciden");
+    handleSubmit(() => {
+      registerMutate();
+    })();
+  };
+
+  // REGISTER REQUEST
+  const { mutate: registerMutate, isLoading: isLoadingRequest } = useMutation<
+    LoginApiResponse,
+    Error
+  >(
+    async (): Promise<LoginApiResponse> => {
+      const { repeatPassword, ...rest } = watch();
+      return await registerService(rest);
+    },
+    {
+      onSuccess: ({ data: { token, user } }) => {
+        setIsAuthenticated(true);
+        setUser(user);
+        localStorage.setItem("token", token);
+        toast.success("Bienvenido!");
+      },
+      onError: (error: any) => {
+        toast.warning(getErrorResponse(error));
+      },
+    }
+  );
 
   return (
     <AuthRoutes>
       <title>Registro</title>
       <Container
-        bgColor="bg-white"
-        size={{ width: "w-full", minHeight: "min-h-screen" }}
+        size={{ width: "w-full", height: "min-h-screen" }}
         justify="justify-center"
-        align="items-center"
         display="flex"
         flexWrap="lg:flex-nowrap flex-wrap"
         flexDirection="flex-row"
       >
         {/* Left Section */}
         <Container
-          separator={{ padding: "lg:px-10 px-5 pt-24" }}
+          separator={{ padding: "lg:px-10 px-5 pt-16" }}
           size={{ width: "lg:w-6/12 w-full", minHeight: "min-h-screen" }}
           bgColor="bg-background"
           display="flex"
           flexDirection="flex-col"
         >
-          <Text
-            text="¡Obtén el feedback que necesitabas!"
+          {/* Title */}
+          <Container
+            as="h3"
             font={{
               color: "text-primary",
-              size: "text-6xl",
+              size: "xl:text-6xl lg:text-5xl md:text-6xl text-6xl",
               weight: "font-bold",
               align: "text-center",
             }}
-          />
+          >
+            {"¡Obtén el feedback que necesitabas!"}
+          </Container>
           <Container
-            className="overflow-hidden"
             position="relative"
             size={{ width: "w-full", height: "h-[35rem]" }}
-            separator={{ padding: "lg:p-20 px-4 py-10" }}
           >
             <Container
+              size={{
+                height: `h-[${donut.height}px]`,
+                width: `w-[${donut.width}px]`,
+              }}
               position="absolute"
-              className="lg:left-16 left-10 top-[10rem]"
+              className="2xl:left-[5rem] xl:left-[0rem] left-[0rem] top-[10rem] "
             >
               <Image
                 alt="Donut Image"
@@ -75,17 +142,29 @@ const RegisterPage: NextPage = () => {
               />
             </Container>
             <Container
+              size={{
+                height: `h-[${laptop.height}px]`,
+                width: `w-[${laptop.width}px]`,
+              }}
               position="absolute"
-              className="lg:left-[10rem] left-10 top-[10rem]"
+              className="2xl:left-[10rem] xl:left-[5rem] left-[5rem] top-[13rem]"
             >
+              {/* Logo Img */}
               <Image
                 alt="Laptop Image"
                 src={laptop.src}
                 width={laptop.width}
-                height={logo.height}
+                height={laptop.height}
               />
             </Container>
-            <Container position="absolute" className="lg:right-5 -right-10">
+            <Container
+              size={{
+                height: `h-[${person.height}px]`,
+                width: `w-[${person.width}px]`,
+              }}
+              position="absolute"
+              className="2xl:left-[23rem] xl:left-[10rem] left-[10rem] top-[8rem]"
+            >
               <Image
                 alt="Person Image"
                 src={person.src}
@@ -97,7 +176,9 @@ const RegisterPage: NextPage = () => {
           <Container
             size={{ width: "w-full" }}
             display="flex"
+            className="cursor-pointer"
             justify="justify-center"
+            onClick={GoToRoot}
           >
             <Image
               alt="Voist Logo"
@@ -109,10 +190,12 @@ const RegisterPage: NextPage = () => {
         </Container>
         {/* Right Section */}
         <Container
-          separator={{ padding: "lg:p-44 md:p-20 p-10" }}
+          separator={{ padding: "xl:p-20 lg:p-20 md:px-40 p-10" }}
           size={{ width: "lg:w-6/12 w-full" }}
+          display="flex"
+          align="items-center"
+          justify="justify-center"
         >
-          {/* Img */}
           <Container
             separator={{ padding: "py-10" }}
             justify="justify-center"
@@ -148,6 +231,7 @@ const RegisterPage: NextPage = () => {
                 display="flex"
                 justify="justify-center"
               >
+                {/* GO TO LOGIN */}
                 <Container>
                   <Text display="inline" text="¿Ya tiene una cuenta?" />
                   <Text
@@ -160,8 +244,8 @@ const RegisterPage: NextPage = () => {
                   />
                 </Container>
               </Container>
-              {/* Form */}
 
+              {/* Form */}
               <Container
                 as="form"
                 onSubmit={handleSubmitForm}
@@ -170,18 +254,110 @@ const RegisterPage: NextPage = () => {
                 display="flex"
                 flexDirection="flex-col"
               >
-                <InputText label={{ text: "Nombres" }} />
-                <InputText label={{ text: "Apellidos" }} />
-                <InputText label={{ text: "Correo" }} />
-                <InputText type="password" label={{ text: "Contraseña" }} />
-                <InputText
-                  type="password"
-                  label={{ text: "Repetir Contraseña" }}
+                {/* Field name */}
+                <Controller
+                  name="name"
+                  control={control}
+                  render={({ field }) => (
+                    <InputText
+                      placeholder="Escribe tus nombres"
+                      onFocus={handleInputFocus}
+                      helpText={{ text: errors.name?.message }}
+                      onChange={field.onChange}
+                      value={field.value}
+                      label={{ text: "Nombres" }}
+                      name="name"
+                      autoComplete="name"
+                      required
+                    />
+                  )}
                 />
+
+                {/* Field lastname */}
+                <Controller
+                  name="lastname"
+                  control={control}
+                  render={({ field }) => (
+                    <InputText
+                      placeholder="Escribe tus apellidos"
+                      onFocus={handleInputFocus}
+                      helpText={{ text: errors.lastname?.message }}
+                      onChange={field.onChange}
+                      value={field.value}
+                      label={{ text: "Apellidos" }}
+                      name="lastname"
+                      autoComplete="lastname"
+                      required
+                    />
+                  )}
+                />
+
+                {/* Field email */}
+                <Controller
+                  name="email"
+                  control={control}
+                  render={({ field }) => (
+                    <InputText
+                      placeholder="Escribe tu correo electrónico"
+                      onFocus={handleInputFocus}
+                      helpText={{ text: errors.email?.message }}
+                      onChange={field.onChange}
+                      value={field.value}
+                      label={{ text: "Correo" }}
+                      name="email"
+                      autoComplete="username"
+                      required
+                    />
+                  )}
+                />
+
+                {/* Field password */}
+                <Controller
+                  name="password"
+                  control={control}
+                  render={({ field }) => (
+                    <InputText
+                      placeholder="Escribe tu contraseña"
+                      onFocus={handleInputFocus}
+                      helpText={{ text: errors.password?.message }}
+                      onChange={field.onChange}
+                      value={field.value}
+                      label={{ text: "Contraseña" }}
+                      name="password"
+                      type="password"
+                      autoComplete="current-password"
+                      required
+                    />
+                  )}
+                />
+
+                {/* Field Repeat password */}
+                <Controller
+                  name="repeatPassword"
+                  control={control}
+                  render={({ field }) => (
+                    <InputText
+                      placeholder="Repite tu contraseña"
+                      onFocus={handleInputFocus}
+                      helpText={{ text: errors.repeatPassword?.message }}
+                      onChange={field.onChange}
+                      value={field.value}
+                      label={{ text: "Repite Contraseña" }}
+                      name="repeatPassword"
+                      type="password"
+                      autoComplete="current-password"
+                      required
+                    />
+                  )}
+                />
+
+                {/* Button Form */}
                 <Button
                   text="Registrarse"
                   font={{ color: "text-white", weight: "font-semibold" }}
                   type="submit"
+                  loading={isLoadingRequest}
+                  disabled={isLoadingRequest}
                 />
               </Container>
             </Container>

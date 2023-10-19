@@ -6,8 +6,8 @@ export interface IconProps
     HTMLElement
   > {
   className?: string;
+  font?: FontType;
   onClick?: React.MouseEventHandler<HTMLElement>;
   remixicon: string;
   size?: SizeType;
-  font?: FontType;
 }

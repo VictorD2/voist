@@ -6,11 +6,11 @@ import {
 import { ReactNode } from "react";
 
 export type DropdownMenuProps = {
-  children: ReactNode;
-  buttonNode: ReactNode;
-  positionAbs?: string;
   bgColor?: BackgroundColorType;
-  size?: SizeType;
+  buttonNode: ReactNode;
+  children: ReactNode;
+  positionAbs?: string;
   separator?: SeparatorType;
+  size?: SizeType;
   show?: boolean;
 };

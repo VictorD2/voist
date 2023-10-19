@@ -31,6 +31,7 @@ type GlobalContextType = {
 export const initialStateUser: UserType = {
   id: 0,
   name: "",
+  lastname: "",
   email: "",
 };
 
@@ -53,13 +54,11 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      const user = jwtDecode<UserType>(token);
-      setUser(user);
+      const jwt = jwtDecode<any>(token);
+      setUser(jwt.sub);
       setIsAuthenticated(true);
     }
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
+    setIsLoading(false);
   }, []);
 
   return (

@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from "react";
+
 export type Item = {
   slug: string;
   link: string | "#";
@@ -20,7 +22,7 @@ export type ItemProps = {
   textColor?: string;
   textHover?: string;
   iconSize?: string;
-  setDrawer?: Function;
+  setExpand?: Dispatch<SetStateAction<boolean>>;
   sons: Array<Item>;
   expand?: boolean;
   onClick?: React.MouseEventHandler<any>;

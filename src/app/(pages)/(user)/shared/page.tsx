@@ -1,13 +1,13 @@
 "use client";
-import Button from "@/app/ui/Button";
-import Container from "@/app/ui/Container";
-import InputText from "@/app/ui/InputText";
+import { useState } from "react";
 import { NextPage } from "next";
-import FileFolder from "../my-space/FileFolder";
 import folderFileList from "./fileFolderList.json";
+import FileFolder from "../my-space/FileFolder";
 import paths from "@/app/shared/routes/paths";
 import Breadcrumbs from "@/app/ui/Breadcrumbs";
-import { useState } from "react";
+import Container from "@/app/ui/Container";
+import InputText from "@/app/ui/InputText";
+import Button from "@/app/ui/Button";
 
 const SharedPage: NextPage = () => {
   const [isActived, setIsActived] = useState<boolean>(false);
@@ -16,17 +16,17 @@ const SharedPage: NextPage = () => {
     <>
       <Container
         size={{ width: "w-full" }}
-        display="flex"
         flexDirection="flex-col"
+        display="flex"
         gap="gap-5"
       >
         {/* Search */}
         <Container
+          separator={{ padding: "p-1" }}
           size={{ width: "w-full" }}
-          display="flex"
           flexDirection="flex-row"
           justify="justify-center"
-          separator={{ padding: "p-1" }}
+          display="flex"
         >
           <InputText
             placeholder="Buscar..."
@@ -45,40 +45,40 @@ const SharedPage: NextPage = () => {
       <Container
         separator={{ margin: "mt-10" }}
         size={{ width: "w-full" }}
-        display="flex"
         flexDirection="flex-row"
         flexWrap="flex-nowrap"
+        display="flex"
         gap="gap-4"
       >
         <Button
-          ripples={false}
-          size={{ width: "" }}
-          text="Añadir filtros"
-          remixicon="ri-filter-line"
-          bgColor="bg-white"
           border={{ size: "border", color: "border-gray-200" }}
+          remixicon="ri-filter-line"
+          text="Añadir filtros"
+          size={{ width: "" }}
+          bgColor="bg-white"
+          ripples={false}
         />
         <Button
-          ripples={false}
+          border={{ size: "border", color: "border-gray-200" }}
           text="Ordenar por más recientes"
+          remixicon="ri-sort-desc"
           size={{ width: "" }}
+          bgColor="bg-white"
           toggle={isActived}
+          ripples={false}
           onClick={() => {
             setIsActived((state) => !state);
           }}
-          remixicon="ri-sort-desc"
-          bgColor="bg-white"
-          border={{ size: "border", color: "border-gray-200" }}
         />
       </Container>
 
       {/* List */}
       <Container
         separator={{ margin: "mt-10" }}
-        display="flex"
         flexDirection="flex-row"
-        flexWrap="flex-wrap"
         justify="justify-evenly"
+        flexWrap="flex-wrap"
+        display="flex"
         gap="gap-10"
       >
         {folderFileList.map((item) => {

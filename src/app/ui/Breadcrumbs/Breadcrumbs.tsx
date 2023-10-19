@@ -1,10 +1,10 @@
 import React, { FC } from "react";
-import { BreadcrumbsProps } from "./Breadcrumbs.type";
 import { useRouter } from "next/navigation";
+import { mergeObjects } from "@/app/shared/utils/helpers";
+import { BreadcrumbsProps } from "./Breadcrumbs.type";
+import { defaultFont } from "./Breadcrumbs.default";
 import Container from "../Container";
 import Icon from "../Icon";
-import { mergeObjects } from "@/app/shared/utils/helpers";
-import { defaultFont } from "./Breadcrumbs.default";
 
 const Breadcrumbs: FC<BreadcrumbsProps> = (props) => {
   const { routes, font = {}, colorFirst = "text-primary" } = props;

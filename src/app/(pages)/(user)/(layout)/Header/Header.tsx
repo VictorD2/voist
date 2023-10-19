@@ -1,12 +1,13 @@
 import React, { FC } from "react";
+import { classNames } from "@/app/shared/utils/helpers";
 import { HeaderProps } from "./Header.type";
 import Container from "@/app/ui/Container";
-import { classNames } from "@/app/shared/utils/helpers";
 import MenuProfile from "./MenuProfile";
 
 const Header: FC<HeaderProps> = (props) => {
   const { expand, setExpand } = props;
 
+  // CHANGE STATE OF EXPAND SIDEBAR
   const handleChangeExpand = () => setExpand((value) => !value);
 
   return (

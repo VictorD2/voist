@@ -1,10 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import React, { ReactNode, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import React, { ReactNode } from "react";
 import { useGlobalContext } from "../../contexts/GlobalProvider";
 import Loading from "../../components/Loading";
+import Redirect from "../Redirect";
+import paths from "../paths";
 
 const ProtectedRoutes = ({
   children,
@@ -13,19 +14,15 @@ const ProtectedRoutes = ({
   children: ReactNode;
   code?: string;
 }) => {
-  const router = useRouter();
   const {
     auth: { isAuthenticated },
     loading: { isLoading },
   } = useGlobalContext();
 
-  useEffect(() => {
-    if (!isAuthenticated) router.push("/login");
-  }, [isAuthenticated]);
-
-  // if (!isAuthenticated) router.push("/login");
-
   if (isLoading) return <Loading />;
+
+  if (!isAuthenticated) return <Redirect to={paths.login} />;
+
   return <>{children}</>;
 };
 

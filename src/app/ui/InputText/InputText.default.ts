@@ -8,6 +8,11 @@ import {
 import { LabelProps } from "../Label/Label.type";
 import { TextProps } from "../Text/Text.type";
 
+export const defaultSeparator: SeparatorType = {
+  margin: "",
+  padding: "px-3 py-1",
+};
+
 export const defaultHelpText: TextProps = {
   text: "",
   font: {
@@ -23,10 +28,6 @@ export const defaultHelpText: TextProps = {
   },
 };
 
-export const defaultFont: FontType = {
-  color: "text-black",
-};
-
 export const defaultLabel: LabelProps = {
   text: "",
   font: {
@@ -40,16 +41,6 @@ export const defaultLabel: LabelProps = {
   },
 };
 
-export const defaultSeparator: SeparatorType = {
-  margin: "",
-  padding: "px-3 py-1",
-};
-
-export const defaultShadow: ShadowType = {
-  color: "shadow-primary",
-  size: "shadow-none",
-};
-
 export const defaultBorder: BorderType = {
   color: "",
   focusColor: "focus:border-primary",
@@ -58,6 +49,15 @@ export const defaultBorder: BorderType = {
   style: "border-solid",
 };
 
+export const defaultShadow: ShadowType = {
+  color: "shadow-primary",
+  size: "shadow-none",
+};
+
 export const defaultSize: SizeType = {
   width: "w-full",
+};
+
+export const defaultFont: FontType = {
+  color: "text-black",
 };

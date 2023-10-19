@@ -5,13 +5,13 @@ import {
 } from "../../styles/types";
 
 export type ModalProps = {
-  open: boolean;
-  onClose: Function;
-  children: React.ReactNode;
-  width?: WidthType;
-  overflowClosed?: boolean;
-  header?: React.ReactNode;
-  overlayBgColor?: BackgroundColorType;
   bgColor?: BackgroundColorType;
+  children: React.ReactNode;
+  header?: React.ReactNode;
   rounded?: RoundedType;
+  onClose: Function;
+  open: boolean;
+  overflowClosed?: boolean;
+  overlayBgColor?: BackgroundColorType;
+  width?: WidthType;
 };

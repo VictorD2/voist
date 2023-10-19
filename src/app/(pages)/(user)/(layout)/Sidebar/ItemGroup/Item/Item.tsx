@@ -9,26 +9,23 @@ import Icon from "@/app/ui/Icon";
 
 const Item: FC<ItemProps> = (props) => {
   const {
-    first = false,
-    setDrawer,
-    slug,
+    textHover = "hover:text-white",
+    textColor = "text-secondary",
+    colorActive = "text-white",
+    bgActive = "bg-primary",
+    gapTextIcon = "gap-3",
+    iconSize = "text-xl",
     remixicon = "",
-    link,
     marginLeft = 0,
     expand = true,
-    iconSize = "text-xl",
-    gapTextIcon = "gap-3",
-    bgActive = "bg-primary",
-    colorActive = "text-white",
-    textColor = "text-secondary",
-    textHover = "hover:text-white",
-    // bgActive = "bg-primary",
-    // colorActive = "text-primary",
-    // textColor = "text-secondary",
-    // textHover = "hover:text-primary",
+    first = false,
+    setExpand,
     sons = [],
     onClick,
+    slug,
+    link,
   } = props;
+
   const pathname = usePathname();
   const router = useRouter();
 
@@ -49,11 +46,9 @@ const Item: FC<ItemProps> = (props) => {
         if (element.className.includes("ripple")) element.remove();
       }
       div.appendChild(circle);
-      circle.addEventListener("animationend", () => {
-        circle.remove();
-      });
+      circle.addEventListener("animationend", () => circle.remove());
       router.push(link);
-      if (setDrawer) setDrawer(false);
+      if (setExpand) setExpand(true);
     }
 
     if (onClick) onClick(e);
@@ -160,22 +155,22 @@ const Item: FC<ItemProps> = (props) => {
                   {sons.map((item) => {
                     return (
                       <Item
-                        code={item.code}
-                        key={item.slug}
                         marginLeft={marginLeft + 17}
-                        gapTextIcon="gap-1"
-                        expand={expand}
-                        setDrawer={setDrawer}
-                        onClick={onClick}
-                        sons={item.children}
-                        link={item.link}
-                        slug={item.slug}
-                        iconSize="text-[8px]"
-                        bgActive={bgActive}
-                        colorActive={colorActive}
                         remixicon={item.remixicon}
+                        colorActive={colorActive}
+                        setExpand={setExpand}
+                        iconSize="text-[8px]"
                         textColor={textColor}
                         textHover={textHover}
+                        sons={item.children}
+                        gapTextIcon="gap-1"
+                        bgActive={bgActive}
+                        onClick={onClick}
+                        code={item.code}
+                        link={item.link}
+                        slug={item.slug}
+                        key={item.slug}
+                        expand={expand}
                       />
                     );
                   })}

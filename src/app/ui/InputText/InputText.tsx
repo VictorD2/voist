@@ -152,7 +152,10 @@ const InputText: FC<InputTextProps> = (props) => {
                 separatorStyle.padding,
                 disabled ? "bg-gray-300" : bgColor,
                 "focus:outline-none appearance-none w-full",
-                remixicon ? "rounded-l-md" : rounded
+                remixicon ? "rounded-l-md" : rounded,
+                borderStyle.focusColor,
+                borderStyle.color,
+                borderStyle.size
               )}
               name={id}
               id={id}

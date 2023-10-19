@@ -1,29 +1,53 @@
 "use client";
 
-import Container from "@/app/ui/Container";
-import contact from "@/app/shared/assets/img/contact.png";
-import Text from "@/app/ui/Text";
+import { useForm, Controller } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { NextPage } from "next";
 import Image from "next/image";
-import Button from "@/app/ui/Button";
-import InputText from "@/app/ui/InputText";
+import { useGlobalContext } from "@/app/shared/contexts/GlobalProvider";
+import contact from "@/app/shared/assets/img/contact.png";
+import { UserType } from "@/app/shared/types/user.type";
 import Breadcrumbs from "@/app/ui/Breadcrumbs";
 import paths from "@/app/shared/routes/paths";
-import { useRouter } from "next/navigation";
+import Container from "@/app/ui/Container";
+import InputText from "@/app/ui/InputText";
+import Button from "@/app/ui/Button";
+import Text from "@/app/ui/Text";
 
 const PerfilPage: NextPage = () => {
   const router = useRouter();
 
+  const {
+    user: { user },
+  } = useGlobalContext();
   const handleChangePassword = () => router.push(paths.changePassword);
 
+  const {
+    control,
+    formState: { errors },
+    setError,
+  } = useForm<UserType>({
+    defaultValues: {
+      email: user.email,
+      lastname: user.lastname,
+      name: user.name,
+      password: "",
+    },
+  });
+
+  const handleInputFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    const name = e.target.name as keyof Omit<UserType, "id" | "password">;
+    setError(name, { message: "" });
+  };
+
   return (
-    <Container>
+    <Container as="form">
       <Container
-        size={{ width: "w-full" }}
-        display="flex"
-        flexDirection="flex-col"
-        gap="gap-5"
         separator={{ margin: "mb-10" }}
+        size={{ width: "w-full" }}
+        flexDirection="flex-col"
+        display="flex"
+        gap="gap-5"
       >
         {/* Title */}
         <Breadcrumbs
@@ -31,25 +55,25 @@ const PerfilPage: NextPage = () => {
         />
       </Container>
       <Container
-        display="flex"
-        flexWrap="flex-wrap"
-        flexDirection="flex-row"
         separator={{ padding: "lg:pl-10 pl-0" }}
+        flexDirection="flex-row"
+        flexWrap="flex-wrap"
+        display="flex"
       >
         <Container
           size={{
-            width: "lg:w-1/2 w-full",
             minHeight: "lg:min-h-[20rem] min-h-[15rem]",
+            width: "lg:w-1/2 w-full",
           }}
         >
           <Text text="Imagen de Perfil" font={{ size: "text-xl" }} />
           <Container
             separator={{ margin: "mt-5" }}
-            display="flex"
             flexDirection="flex-row"
             flexWrap="flex-nowrap"
-            gap="gap-5"
             align="items-center"
+            display="flex"
+            gap="gap-5"
           >
             <Image
               height={contact.height * 2}
@@ -59,91 +83,138 @@ const PerfilPage: NextPage = () => {
               src={contact.src}
             />
             <Button
+              border={{ size: "border", color: "border-gray-200" }}
               remixicon="ri-image-edit-line"
               text="Cambiar Imagen"
               size={{ width: "" }}
               bgColor="bg-white"
-              border={{ size: "border", color: "border-gray-200" }}
             />
           </Container>
         </Container>
         <Container
           size={{
-            width: "lg:w-1/2 w-full",
             minHeight: "lg:min-h-[20rem] min-h-[15rem]",
+            width: "lg:w-1/2 w-full",
           }}
         >
           <Text text="Cuenta" font={{ size: "text-xl" }} />
           <Container
             separator={{ margin: "mt-5" }}
-            display="flex"
             flexDirection="flex-col"
+            display="flex"
             gap="gap-5"
           >
-            <InputText
+            <Controller
               name="email"
-              size={{ width: "w-96" }}
-              value="fjara@upao.edu.pe"
-              label={{ text: "Correo" }}
+              control={control}
+              render={({ field }) => (
+                <InputText
+                  helpText={{ text: errors.email?.message }}
+                  placeholder="Escribe tu correo"
+                  onFocus={handleInputFocus}
+                  label={{ text: "Correo" }}
+                  onChange={field.onChange}
+                  size={{ width: "w-96" }}
+                  autoComplete="username"
+                  value={field.value}
+                  name="email"
+                  required
+                />
+              )}
             />
-            <InputText
-              name="current-password"
-              size={{ width: "w-96" }}
-              value="*********"
-              type="password"
-              label={{ text: "Contraseña" }}
+            <Controller
+              name="password"
+              control={control}
+              render={({ field }) => (
+                <InputText
+                  helpText={{ text: errors.password?.message }}
+                  placeholder="Escribe tu contraseña"
+                  autoComplete="current-password"
+                  label={{ text: "Contraseña" }}
+                  onFocus={handleInputFocus}
+                  onChange={field.onChange}
+                  size={{ width: "w-96" }}
+                  value={field.value}
+                  name="password"
+                  type="password"
+                  required
+                />
+              )}
             />
           </Container>
         </Container>
         <Container
           size={{
-            width: "lg:w-1/2 w-full",
             minHeight: "lg:min-h-[20rem] min-h-[15rem]",
+            width: "lg:w-1/2 w-full",
           }}
         >
           <Text text="Información Personal" font={{ size: "text-xl" }} />
           <Container
             separator={{ margin: "mt-5" }}
-            display="flex"
             flexDirection="flex-col"
+            display="flex"
             gap="gap-5"
           >
-            <InputText
+            <Controller
               name="name"
-              size={{ width: "w-96" }}
-              value="Francisco"
-              label={{ text: "Nombres" }}
+              control={control}
+              render={({ field }) => (
+                <InputText
+                  helpText={{ text: errors.name?.message }}
+                  placeholder="Escribe tus nombres"
+                  label={{ text: "Nombres" }}
+                  onFocus={handleInputFocus}
+                  onChange={field.onChange}
+                  size={{ width: "w-96" }}
+                  value={field.value}
+                  name="name"
+                  required
+                />
+              )}
             />
-            <InputText
-              name="apellido"
-              size={{ width: "w-96" }}
-              value="Jara"
-              label={{ text: "Apellidos" }}
+
+            <Controller
+              name="lastname"
+              control={control}
+              render={({ field }) => (
+                <InputText
+                  helpText={{ text: errors.lastname?.message }}
+                  placeholder="Escribe tus apellidos"
+                  label={{ text: "Apellidos" }}
+                  onFocus={handleInputFocus}
+                  onChange={field.onChange}
+                  size={{ width: "w-96" }}
+                  value={field.value}
+                  name="lastname"
+                  required
+                />
+              )}
             />
           </Container>
         </Container>
         <Container
           size={{
-            width: "lg:w-1/2 w-full",
             minHeight: "lg:min-h-[20rem] min-h-[15rem]",
+            width: "lg:w-1/2 w-full",
           }}
         >
           <Button
+            border={{ size: "border", color: "border-gray-200" }}
             onClick={handleChangePassword}
             text="Modificar Contraseña"
+            remixicon="ri-key-2-line"
             size={{ width: "" }}
             bgColor="bg-white"
-            remixicon="ri-key-2-line"
-            border={{ size: "border", color: "border-gray-200" }}
           />
         </Container>
       </Container>
 
       <Container display="flex" justify="justify-center">
         <Button
-          size={{ width: "" }}
-          text="Guardar Cambios"
           font={{ color: "text-white" }}
+          text="Guardar Cambios"
+          size={{ width: "" }}
         />
       </Container>
     </Container>

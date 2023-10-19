@@ -1,32 +1,93 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
+import { useRouter, useSearchParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { useMutation, useQuery } from "react-query";
+import { toast } from "react-toastify";
 import { NextPage } from "next";
+import { useGlobalContext } from "@/app/shared/contexts/GlobalProvider";
+import ModalCreateFolder from "../my-space/ModalCreateFolder";
+import { getErrorResponse } from "@/app/shared/utils/helpers";
+import ModalCreateClass from "../my-space/ModalCreateClass";
+import { FolderType } from "@/app/shared/types/folder.type";
+import { ButtonProps } from "@/app/ui/Button/Button.type";
+import { ClassType } from "@/app/shared/types/class.type";
+import { UserType } from "@/app/shared/types/user.type";
+import HeaderModal from "@/app/ui/Modal/HeaderModal";
+import DropdownMenu from "@/app/ui/DropdownMenu";
 import FileFolder from "../my-space/FileFolder";
-import folderFileList from "./fileFolderList.json";
-import paths from "@/app/shared/routes/paths";
 import Breadcrumbs from "@/app/ui/Breadcrumbs";
+import Item from "@/app/ui/DropdownMenu/Item";
+import paths from "@/app/shared/routes/paths";
 import InputText from "@/app/ui/InputText";
 import Container from "@/app/ui/Container";
+import Confirm from "@/app/ui/Confirm";
 import Button from "@/app/ui/Button";
-import { useState } from "react";
-import DropdownMenu from "@/app/ui/DropdownMenu";
-import Item from "@/app/ui/DropdownMenu/Item";
-import { ButtonProps } from "@/app/ui/Button/Button.type";
 import Modal from "@/app/ui/Modal";
-import ModalCreateFolder from "../my-space/ModalCreateFolder";
-import Text from "@/app/ui/Text";
-import Icon from "@/app/ui/Icon";
+import {
+  FolderApiResponse,
+  FoldersApiResponse,
+  createFolderService,
+  deleteFolderService,
+  getFolderService,
+  updateFolderService,
+} from "@/app/shared/services/folder.services";
+import {
+  ClassApiResponse,
+  createClassService,
+  deleteClassService,
+  updateClassService,
+} from "@/app/shared/services/class.services";
+
+interface Link {
+  name: string;
+  link: string;
+}
+
+type FolderWithContacts = FolderType & { contacts: Array<UserType> };
+type ClassWithContacts = ClassType & { contacts: Array<UserType> };
 
 const ClassesPage: NextPage = () => {
-  const [isActived, setIsActived] = useState<boolean>(false);
-  const [showModalAdd, setShowModalAdd] = useState<boolean>(false);
-  const [showMenuAdd, setMenuModalAdd] = useState<boolean>(false);
+  const params = useSearchParams();
+  const router = useRouter();
 
-  const handleModalClose = () => setShowModalAdd(false);
-  const handleOpenModalCreate = () => {
-    setMenuModalAdd(false);
-    setShowModalAdd(true);
+  const [folderSelected, setFolderSelected] = useState<FolderWithContacts>(); //Folder selected to edit or delete
+  const [classSelected, setClassSelected] = useState<ClassWithContacts>(); //Class selected to edit or delete
+  const [folders, setFolders] = useState<Array<FolderWithContacts>>([]); //Folder list
+  const [classes, setClasses] = useState<Array<ClassWithContacts>>([]); //Class list
+  const [routes, setRoutes] = useState<Array<Link>>([]); //Breadcrums
+  const [showModalAddFolder, setShowModalAddFolder] = useState<boolean>(false); //Show modal folder
+  const [showModalAddClass, setShowModalAddClass] = useState<boolean>(false); //Show modal folder
+  const [showMenuAdd, setMenuModalAdd] = useState<boolean>(false); //Show menu folder options
+  const [showConfirmFolder, setShowConfirmFolder] = useState<boolean>(false); //Show confirm delete folder
+  const [showConfirmClass, setShowConfirmClass] = useState<boolean>(false); //Show confirm delete folder
+  const [isActived, setIsActived] = useState<boolean>(false); // Order by button
+
+  const {
+    user: { user },
+  } = useGlobalContext();
+
+  // Close modal folder
+  const handleModalClose = () => {
+    setShowModalAddFolder(false);
+    setShowModalAddClass(false);
   };
 
+  // When we open the modal folder
+  const handleOpenModalCreateFolder = () => {
+    setFolderSelected(undefined); //Reset folder form values
+    setMenuModalAdd(false); //Hide menu folder options
+    setShowModalAddFolder(true); //Show modal
+  };
+
+  //When we open the modal class
+  const handleOpenModalCreateClass = () => {
+    setClassSelected(undefined); //Reset folder form values
+    setMenuModalAdd(false); //Hide menu folder options
+    setShowModalAddClass(true); //Show modal
+  };
+
+  // Options New Button
   const menuAddItems: Array<ButtonProps> = [
     {
       text: "Iniciar grabación",
@@ -34,6 +95,7 @@ const ClassesPage: NextPage = () => {
       font: {
         size: "text-sm",
       },
+      onClick: handleOpenModalCreateClass,
     },
     {
       text: "Crear carpeta",
@@ -41,12 +103,238 @@ const ClassesPage: NextPage = () => {
       font: {
         size: "text-sm",
       },
-      onClick: handleOpenModalCreate,
+      onClick: handleOpenModalCreateFolder,
     },
   ];
 
+  // Create folder request
+  const { mutate: createFolderMutate } = useMutation<
+    FolderApiResponse,
+    Error,
+    FolderWithContacts
+  >(
+    async (folderData: FolderWithContacts): Promise<FolderApiResponse> => {
+      const { id, contacts, ...rest } = folderData;
+      return await createFolderService(
+        {
+          ...rest,
+          folderId: Number(params.get("folder")),
+        },
+        contacts.map((item) => item.id)
+      );
+    },
+    {
+      onSuccess: ({ data }) => {
+        toast.success("Carpeta Creada");
+        setFolders([...folders, data]);
+        setShowModalAddFolder(false);
+      },
+      onError: (error: any) => {
+        toast.warning(getErrorResponse(error));
+      },
+    }
+  );
+
+  // Create class request
+  const { mutate: createClassMutate } = useMutation<
+    ClassApiResponse,
+    Error,
+    Omit<ClassWithContacts, "filename" | "createdAt"> & { file?: File }
+  >(
+    async (
+      classData: Omit<ClassWithContacts, "filename" | "createdAt"> & {
+        file?: File;
+      }
+    ): Promise<ClassApiResponse> => {
+      const { id, file, contacts, ...rest } = classData;
+      return await createClassService(
+        {
+          ...rest,
+          folderId: Number(params.get("folder")),
+        },
+        contacts.map((item) => item.id),
+        file
+      );
+    },
+    {
+      onSuccess: ({ data }) => {
+        toast.success("Clase Creada");
+        setClasses([...classes, data]);
+        setShowModalAddClass(false);
+      },
+      onError: (error: any) => {
+        toast.warning(getErrorResponse(error));
+      },
+    }
+  );
+
+  // Update folder request
+  const { mutate: editFolderMutate } = useMutation<
+    FolderApiResponse,
+    Error,
+    FolderWithContacts
+  >(
+    async (folderData: FolderWithContacts): Promise<FolderApiResponse> => {
+      const { folderId, contacts, userId, ...rest } = folderData;
+      return await updateFolderService(
+        rest,
+        contacts.map((item) => item.id)
+      );
+    },
+    {
+      onSuccess: ({ data }) => {
+        toast.success("Carpeta Editada");
+        setFolders(
+          folders.map((item) => {
+            if (item.id === data.id) return data;
+            return item;
+          })
+        );
+        setShowModalAddFolder(false);
+      },
+      onError: (error: any) => {
+        toast.warning(getErrorResponse(error));
+      },
+    }
+  );
+
+  // Update folder request
+  const { mutate: editClassMutate } = useMutation<
+    ClassApiResponse,
+    Error,
+    Omit<ClassWithContacts, "filename" | "createdAt">
+  >(
+    async (
+      classData: Omit<ClassWithContacts, "filename" | "createdAt">
+    ): Promise<ClassApiResponse> => {
+      const { folderId, contacts, userId, ...rest } = classData;
+      return await updateClassService(
+        rest,
+        contacts.map((item) => item.id)
+      );
+    },
+    {
+      onSuccess: ({ data }) => {
+        toast.success("Clase Editada");
+        setClasses(
+          classes.map((item) => {
+            if (item.id === data.id) return data;
+            return item;
+          })
+        );
+        setShowModalAddClass(false);
+      },
+      onError: (error: any) => {
+        toast.warning(getErrorResponse(error));
+      },
+    }
+  );
+
+  // Delete folder request
+  const { mutate: deleteFolderMutate } = useMutation<FolderApiResponse, Error>(
+    async (): Promise<FolderApiResponse> => {
+      return await deleteFolderService(Number(folderSelected?.id));
+    },
+    {
+      onSuccess: ({ data }) => {
+        toast.success("Carpeta Eliminada");
+        setFolders(folders.filter((item) => item.id !== folderSelected?.id));
+      },
+      onError: (error: any) => {
+        toast.warning(getErrorResponse(error));
+      },
+    }
+  );
+
+  // Delete class request
+  const { mutate: deleteClassMutate } = useMutation<ClassApiResponse, Error>(
+    async (): Promise<ClassApiResponse> => {
+      return await deleteClassService(Number(classSelected?.id));
+    },
+    {
+      onSuccess: ({ data }) => {
+        toast.success("Clase Eliminada");
+        setClasses(classes.filter((item) => item.id !== classSelected?.id));
+      },
+      onError: (error: any) => {
+        toast.warning(getErrorResponse(error));
+      },
+    }
+  );
+
+  // Get folders request
+  const { refetch } = useQuery<FoldersApiResponse>(
+    "GET-FOLDERS",
+    async () => {
+      return await getFolderService(Number(params.get("folder")));
+    },
+    {
+      onSuccess: ({ data }) => {
+        setFolders(data.folders);
+        setRoutes(data.routes);
+      },
+      onError: () => {},
+    }
+  );
+
+  useEffect(() => {
+    refetch();
+    return () => {};
+  }, [params.get("folder")]);
+
+  // Submit form folder modal
+  const onSubmitFolder = (folder: FolderType, contacts: Array<UserType>) => {
+    folderSelected
+      ? editFolderMutate({ ...folder, contacts })
+      : createFolderMutate({ ...folder, contacts });
+  };
+
+  // Submit form class modal
+  const onSubmitClass = (
+    classe: Omit<ClassType, "filename" | "createdAt">,
+    contacts: Array<UserType>,
+    file?: File
+  ) => {
+    classSelected
+      ? editClassMutate({ ...classe, contacts })
+      : createClassMutate({ ...classe, contacts, file });
+  };
+
+  // Change Folder url
+  const handleGoFolder = (id: string) => {
+    return () => {
+      router.push(paths.classFolder(String(id)));
+    };
+  };
+
+  // When we open the modal to edit
+  const handleOpenModalEdit = (folder: FolderWithContacts) => {
+    return () => {
+      setShowModalAddFolder(true);
+      setFolderSelected(folder);
+    };
+  };
+
+  // Whe we open the confirm modal
+  const handleConfirmDelete = (folder: FolderWithContacts) => {
+    return () => {
+      setShowConfirmFolder(true);
+      setFolderSelected(folder);
+    };
+  };
+
+  // When we accept confirm modal delete folder
+  const handleDeleteFolder = () => {
+    deleteFolderMutate();
+  };
+
+  // When we accept confirm modal delete class
+  const handleDeleteClass = () => {
+    deleteClassMutate();
+  };
+
   return (
-    < >
+    <>
       <Container
         size={{ width: "w-full" }}
         display="flex"
@@ -69,7 +357,14 @@ const ClassesPage: NextPage = () => {
         </Container>
 
         {/* Breadcrumbs */}
-        <Breadcrumbs routes={[{ link: paths.classes, name: "Mis clases" }]} />
+        <Breadcrumbs
+          routes={[
+            { link: paths.classes, name: "Mis clases" },
+            ...routes.map((item) => {
+              return { ...item, link: paths.classFolder(item.link) };
+            }),
+          ]}
+        />
       </Container>
 
       {/* Actions */}
@@ -82,22 +377,22 @@ const ClassesPage: NextPage = () => {
         gap="gap-4"
       >
         <DropdownMenu
-          show={showMenuAdd}
+          positionAbs="-top-1 -right-[10.7rem]"
           bgColor="bg-transparent"
           size={{ width: "w-44" }}
-          positionAbs="-top-1 -right-[10.7rem]"
+          show={showMenuAdd}
           buttonNode={
             <Button
-              ripples={false}
               onClick={() => setMenuModalAdd((state) => !state)}
-              text="Nuevo"
+              font={{ color: "group-hover:text-white text-black" }}
+              border={{ size: "border", color: "border-gray-200" }}
+              bgColor="bg-white hover:bg-primary"
               remixicon="ri-add-line"
               size={{ width: "" }}
-              font={{ color: "group-hover:text-white text-black" }}
-              transition
               className="group"
-              bgColor="bg-white hover:bg-primary"
-              border={{ size: "border", color: "border-gray-200" }}
+              ripples={false}
+              text="Nuevo"
+              transition
             />
           }
         >
@@ -107,85 +402,154 @@ const ClassesPage: NextPage = () => {
         </DropdownMenu>
 
         <Button
-          ripples={false}
-          size={{ width: "" }}
-          text="Añadir filtros"
-          remixicon="ri-filter-line"
-          bgColor="bg-white"
           border={{ size: "border", color: "border-gray-200" }}
+          remixicon="ri-filter-line"
+          text="Añadir filtros"
+          size={{ width: "" }}
+          bgColor="bg-white"
+          ripples={false}
         />
 
         <Button
-          ripples={false}
+          border={{ size: "border", color: "border-gray-200" }}
           text="Ordenar por más recientes"
+          remixicon="ri-sort-desc"
           size={{ width: "" }}
           toggle={isActived}
+          bgColor="bg-white"
+          ripples={false}
           onClick={() => {
             setIsActived((state) => !state);
           }}
-          remixicon="ri-sort-desc"
-          bgColor="bg-white"
-          border={{ size: "border", color: "border-gray-200" }}
         />
       </Container>
 
       {/* List */}
       <Container
         separator={{ margin: "mt-10" }}
-        display="flex"
+        justify="justify-evenly"
         flexDirection="flex-row"
         flexWrap="flex-wrap"
-        justify="justify-evenly"
+        display="flex"
         gap="gap-10"
       >
-        {folderFileList.map((item) => {
-          return <FileFolder {...item} key={item.id + item.title} />;
+        {folders.map((item) => {
+          return (
+            <FileFolder
+              options={[
+                {
+                  text: "Abrir Carpeta",
+                  font: {
+                    size: "text-sm",
+                  },
+                  onClick: handleGoFolder(item.id + ""),
+                },
+                {
+                  text: "Editar Configuración",
+                  font: {
+                    size: "text-sm",
+                  },
+                  onClick: handleOpenModalEdit(item),
+                },
+                {
+                  text: "Eliminar",
+                  bgColor: "bg-red-400 hover:bg-red-500",
+                  font: {
+                    size: "text-sm",
+                    color: "text-white",
+                  },
+                  onClick: handleConfirmDelete(item),
+                },
+              ]}
+              key={item.id + item.name}
+              id={item.id}
+              isFile={false}
+              title={item.name}
+              updatedAt={item.updatedAt + ""}
+            />
+          );
         })}
       </Container>
+
+      {/* Modal Folder*/}
       <Modal
+        width="2xl:w-5/12 xl:w-7/12 lg:w-6/12 md:w-8/12 w-full"
         onClose={handleModalClose}
-        open={showModalAdd}
-        overflowClosed
         rounded="rounded-2xl"
-        width="lg:w-5/12 md:w-8/12 w-full"
+        open={showModalAddFolder}
+        overflowClosed
         header={
-          <>
-            <Container
-              display="flex"
-              justify="justify-end"
-              separator={{ padding: "px-10 pt-2" }}
-            >
-              <Icon
-                onClick={handleModalClose}
-                className="cursor-pointer"
-                remixicon="ri-close-line"
-                font={{ size: "text-4xl", color: "text-gray-400" }}
-              />
-            </Container>
-            <Container
-              display="flex"
-              flexDirection="flex-row"
-              flexWrap="flex-nowrap"
-              justify="justify-center"
-              align="items-center"
-              gap="gap-5"
-            >
-              <Text
-                size={{ width: "" }}
-                text="Carpeta 1"
-                font={{ size: "text-2xl", weight: "font-semibold" }}
-                display="inline"
-              />
-              <Icon
-                remixicon="ri-edit-2-line"
-                font={{ color: "text-gray-400", size: "text-3xl" }}
-              />
-            </Container>
-          </>
+          <HeaderModal
+            separator={{ padding: "pt-4 px-10" }}
+            font={{
+              color: "text-gray-400",
+              size: "text-4xl",
+            }}
+            xIcon
+            bgColor="bg-white"
+            onClose={handleModalClose}
+          />
         }
       >
-        <ModalCreateFolder />
+        <ModalCreateFolder
+          contactsSelected={folderSelected?.contacts}
+          onCreateFolder={onSubmitFolder}
+          defaultValues={folderSelected}
+          userId={user.id}
+          owner={user}
+        />
       </Modal>
+
+      {/* Modal Class*/}
+      <Modal
+        width="2xl:w-5/12 xl:w-7/12 lg:w-6/12 md:w-8/12 w-full"
+        onClose={handleModalClose}
+        rounded="rounded-2xl"
+        open={showModalAddClass}
+        overflowClosed
+        header={
+          <HeaderModal
+            separator={{ padding: "pt-4 px-10" }}
+            font={{
+              color: "text-gray-400",
+              size: "text-4xl",
+            }}
+            xIcon
+            bgColor="bg-white"
+            onClose={handleModalClose}
+          />
+        }
+      >
+        <ModalCreateClass
+          contactsSelected={classSelected?.contacts}
+          onCreateClass={onSubmitClass}
+          defaultValues={classSelected}
+          userId={user.id}
+          owner={user}
+        />
+      </Modal>
+
+      {/* Confirm Folder */}
+      <Confirm
+        title={`¿Seguro que quieres eliminar ${folderSelected?.name}?`}
+        onConfirm={handleDeleteFolder}
+        setOpen={setShowConfirmFolder}
+        buttonText="Aceptar"
+        open={showConfirmFolder}
+        type="primary"
+        message=""
+      />
+
+      {/* Confirm Class */}
+      <Confirm
+        title={`¿Seguro que quieres eliminar la grabación ${classSelected?.name}?`}
+        onConfirm={handleDeleteClass}
+        setOpen={setShowConfirmClass}
+        buttonText="Aceptar"
+        open={showConfirmClass}
+        type="primary"
+        message=""
+      />
     </>
   );
 };

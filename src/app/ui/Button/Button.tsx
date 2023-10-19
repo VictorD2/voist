@@ -1,9 +1,9 @@
 "use client";
+import { classNames, mergeObjects } from "../../shared/utils/helpers";
 import { ButtonProps } from "./Button.type";
 import styles from "./Button.module.css";
-import { classNames, mergeObjects } from "../../shared/utils/helpers";
-import Icon from "../Icon";
 import Container from "../Container";
+import Icon from "../Icon";
 import {
   defaultBorder,
   defaultFont,
@@ -44,11 +44,11 @@ const Button: React.FC<ButtonProps> = (props) => {
     ...rest
   } = props;
 
-  const borderStyle = mergeObjects(defaultBorder, border);
   const separatorStyle = mergeObjects(defaultSeparator, separator);
+  const borderStyle = mergeObjects(defaultBorder, border);
+  const shadowStyle = mergeObjects(defaultShadow, shadow);
   const fontStyle = mergeObjects(defaultFont, font);
   const sizeStyle = mergeObjects(defaultSize, size);
-  const shadowStyle = mergeObjects(defaultShadow, shadow);
 
   const handleClickEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
     // Ripples
@@ -79,11 +79,9 @@ const Button: React.FC<ButtonProps> = (props) => {
     <button
       className={classNames(
         "transition-all duration-500 relative overflow-hidden",
-        transition ? "transition-all duration-500" : "",
-        disabled
-          ? "bg-opacity-80 text-opacity-80 cursor-not-allowed"
-          : "",
+        disabled ? "bg-opacity-80 text-opacity-80 cursor-not-allowed" : "",
         toggle ? "shadow-inner shadow-secondary" : "",
+        transition ? "transition-all duration-500" : "",
         bgColor,
         display,
         align,
@@ -93,12 +91,12 @@ const Button: React.FC<ButtonProps> = (props) => {
         borderStyle.size,
         borderStyle.color,
         fontStyle.color,
+        fontStyle.size,
         sizeStyle.height,
         sizeStyle.width,
         shadowStyle.color,
         shadowStyle.size,
         className,
-        fontStyle.size,
         sizeStyle.minWidth,
         separatorStyle.padding,
         justify,

@@ -60,7 +60,7 @@ const HeaderModal: React.FC<HeaderModalProps> = (props) => {
           >
             <Icon
               remixicon="ri-close-line"
-              font={{ size: "text-2xl", color: fontStyle.color }}
+              font={fontStyle}
               className={bgColor}
               aria-hidden="true"
             />

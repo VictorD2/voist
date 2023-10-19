@@ -1,5 +1,8 @@
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
+  root: "/",
+  register: "/register",
+  login: "/login",
   perfil: "/perfil",
   changePassword: "/perfil/change-password",
   mySpace: "/my-space",
@@ -7,4 +10,5 @@ export default {
   shared: "/shared",
   contacts: "/contacts",
   class: (id: string) => `/classes/${id}`,
+  classFolder: (id: string) => `/classes?folder=${id}`,
 };

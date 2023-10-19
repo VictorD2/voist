@@ -1,20 +1,20 @@
 "use client";
 import { NextPage } from "next";
-import Container from "@/app/ui/Container";
 import Breadcrumbs from "@/app/ui/Breadcrumbs";
-import Button from "@/app/ui/Button";
 import paths from "@/app/shared/routes/paths";
 import InputText from "@/app/ui/InputText";
+import Container from "@/app/ui/Container";
+import Button from "@/app/ui/Button";
 
 const ChangePasswordPage: NextPage = () => {
   return (
     <Container>
       <Container
-        size={{ width: "w-full" }}
-        display="flex"
-        flexDirection="flex-col"
-        gap="gap-5"
         separator={{ margin: "mb-10" }}
+        size={{ width: "w-full" }}
+        flexDirection="flex-col"
+        display="flex"
+        gap="gap-5"
       >
         {/* Title */}
         <Breadcrumbs
@@ -25,14 +25,14 @@ const ChangePasswordPage: NextPage = () => {
         />
       </Container>
       <Container
-        display="flex"
-        flexWrap="flex-wrap"
-        flexDirection="flex-row"
         separator={{ padding: "lg:pl-10 pl-0" }}
+        flexDirection="flex-row"
+        flexWrap="flex-wrap"
+        display="flex"
       >
         <Container
-          display="flex"
           flexDirection="flex-col"
+          display="flex"
           gap="gap-5"
           size={{
             width: "lg:w-1/2 w-full",
@@ -52,15 +52,15 @@ const ChangePasswordPage: NextPage = () => {
 
       <Container display="flex" justify="justify-center" gap="gap-10">
         <Button
-          bgColor="bg-gray-500"
-          size={{ width: "w-96" }}
-          text="Cancelar"
           font={{ color: "text-white" }}
+          size={{ width: "w-96" }}
+          bgColor="bg-gray-500"
+          text="Cancelar"
         />
         <Button
+          font={{ color: "text-white" }}
           size={{ width: "w-96" }}
           text="Guardar Cambios"
-          font={{ color: "text-white" }}
         />
       </Container>
     </Container>

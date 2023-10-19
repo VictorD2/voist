@@ -1,24 +1,22 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import React, { ReactNode,useEffect } from "react";
-import { useRouter } from "next/navigation";
+import React, { ReactNode } from "react";
 import Loading from "../../components/Loading";
 import { useGlobalContext } from "../../contexts/GlobalProvider";
+import Redirect from "../Redirect";
+import paths from "../paths";
 
 const AuthRoutes = ({ children }: { children: ReactNode }) => {
-  const router = useRouter();
   const {
-    auth: { isAuthenticated },
     loading: { isLoading },
+    auth: { isAuthenticated },
   } = useGlobalContext();
 
-  useEffect(() => {
-    if (isAuthenticated) router.push("/my-space");
-  }, [isAuthenticated]);
-  // if (isAuthenticated) router.push("/my-space");
-
   if (isLoading) return <Loading />;
+
+  if (isAuthenticated) return <Redirect to={paths.mySpace} />;
+
   return <>{children}</>;
 };
 

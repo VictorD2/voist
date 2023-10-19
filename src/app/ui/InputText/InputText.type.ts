@@ -1,10 +1,10 @@
 import {
   BackgroundColorType,
-  BorderType,
-  FontType,
-  RoundedType,
   SeparatorType,
+  RoundedType,
+  BorderType,
   ShadowType,
+  FontType,
   SizeType,
 } from "@/app/styles/types";
 import { LabelProps } from "../Label/Label.type";
@@ -15,16 +15,16 @@ export interface InputTextProps
   bgColor?: BackgroundColorType;
   border?: BorderType;
   eventResponsiveIcon?: () => void;
+  eventFloatIcon?: () => void;
+  floatIcon?: string;
+  font?: FontType;
   helpText?: TextProps;
   label?: LabelProps;
   orientation?: "horizontal" | "vertical";
   remixicon?: string;
   responsiveIcon?: string;
-  shadow?: ShadowType;
   rounded?: RoundedType;
-  font?: FontType;
-  floatIcon?: string;
-  eventFloatIcon?: () => void;
-  size?: SizeType;
   separator?: SeparatorType;
+  shadow?: ShadowType;
+  size?: SizeType;
 }

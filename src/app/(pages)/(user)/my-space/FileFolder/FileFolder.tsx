@@ -1,63 +1,38 @@
 "use client";
 
-import Container from "@/app/ui/Container";
-import { FC, useState } from "react";
+import { useRouter } from "next/navigation";
+import moment from "moment";
+import { FC } from "react";
 import { FileFolderProps } from "./FileFolder.type";
+import DropdownMenu from "@/app/ui/DropdownMenu";
+import paths from "@/app/shared/routes/paths";
+import Item from "@/app/ui/DropdownMenu/Item";
+import Container from "@/app/ui/Container";
 import Icon from "@/app/ui/Icon";
 import Text from "@/app/ui/Text";
-import moment from "moment";
-import DropdownMenu from "@/app/ui/DropdownMenu";
-import { ButtonProps } from "@/app/ui/Button/Button.type";
-import Item from "@/app/ui/DropdownMenu/Item";
-import { useRouter } from "next/navigation";
-import paths from "@/app/shared/routes/paths";
 
 const FileFolder: FC<FileFolderProps> = (props) => {
-  const { id, title, updatedAt, isFile } = props;
-
-  const menuOptionsItems: Array<ButtonProps> = [
-    {
-      text: "Ver detalle",
-      font: {
-        size: "text-sm",
-      },
-    },
-    {
-      text: "Editar Configuración",
-      font: {
-        size: "text-sm",
-      },
-      // onClick: handleOpenModalCreate,
-    },
-    {
-      text: "Eliminar",
-      bgColor: "bg-red-400 hover:bg-red-500",
-      font: {
-        size: "text-sm",
-        color: "text-white",
-      },
-      // onClick: handleOpenModalCreate,
-    },
-  ];
+  const { id, title, updatedAt, isFile, options = [] } = props;
 
   const router = useRouter();
 
   const handleClickFileFolder = () => {
     if (isFile) router.push(paths.class(String(id)));
+    if (!isFile) router.push(paths.classFolder(String(id)));
   };
 
   return (
     <Container
       size={{ width: "lg:w-80 md:w-80 w-full" }}
+      bgColor="hover:bg-gray-300 bg-gray-200"
       separator={{ padding: "p-5" }}
-      rounded="rounded-lg"
-      display="flex"
+      justify="justify-between"
       flexDirection="flex-row"
       flexWrap="flex-nowrap"
-      justify="justify-between"
+      rounded="rounded-lg"
+      display="flex"
       gap="gap-5"
       transition
-      bgColor="hover:bg-gray-300 bg-gray-200"
     >
       <Container onClick={handleClickFileFolder} className="cursor-pointer">
         <Icon
@@ -72,9 +47,9 @@ const FileFolder: FC<FileFolderProps> = (props) => {
         <Text
           text={title}
           font={{
+            whiteSpace: "whitespace-nowrap",
             wordBreak: "break-keep",
             weight: "font-semibold",
-            whiteSpace: "whitespace-nowrap",
           }}
         />
         <Text
@@ -87,9 +62,9 @@ const FileFolder: FC<FileFolderProps> = (props) => {
       </Container>
 
       <DropdownMenu
+        positionAbs="-top-1 -right-[10.7rem]"
         bgColor="bg-transparent"
         size={{ width: "w-44" }}
-        positionAbs="-top-1 -right-[10.7rem]"
         buttonNode={
           <Icon
             className="cursor-pointer"
@@ -98,7 +73,7 @@ const FileFolder: FC<FileFolderProps> = (props) => {
           />
         }
       >
-        {menuOptionsItems.map((item, i) => {
+        {options.map((item, i) => {
           return <Item {...item} key={"item-menu-options-" + i} gap="gap-2" />;
         })}
       </DropdownMenu>

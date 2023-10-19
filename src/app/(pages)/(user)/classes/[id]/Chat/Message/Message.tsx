@@ -1,7 +1,7 @@
-import Container from "@/app/ui/Container";
+import moment from "moment";
 import { FC } from "react";
 import { MessageProps } from "./Message.type";
-import moment from "moment";
+import Container from "@/app/ui/Container";
 import Text from "@/app/ui/Text";
 
 const Message: FC<MessageProps> = (props) => {

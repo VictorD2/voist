@@ -1,8 +1,8 @@
 "use client";
 import { classNames, mergeObjects } from "../../shared/utils/helpers";
-import Container from "../Container";
 import { defaultFont, defaultSize } from "./Icon.default";
 import { IconProps } from "./Icon.type";
+import Container from "../Container";
 
 const Icon: React.FC<IconProps> = (props) => {
   const { className = "", remixicon, font = {}, size = {}, ...rest } = props;

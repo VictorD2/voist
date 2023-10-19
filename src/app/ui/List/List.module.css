@@ -1,0 +1,16 @@
+.list:hover .listScroll::-webkit-scrollbar-thumb {
+  background: #5271FF;
+}
+
+.listScroll::-webkit-scrollbar {
+  width: 5px;
+}
+
+.listScroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.listScroll::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 99px;
+}

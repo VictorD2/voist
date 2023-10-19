@@ -1,6 +1,6 @@
 import Container from "@/app/ui/Container";
-import Message from "./Message";
 import InputText from "@/app/ui/InputText";
+import Message from "./Message";
 
 const Chat = () => {
   return (

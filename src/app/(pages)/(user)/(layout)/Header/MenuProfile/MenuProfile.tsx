@@ -1,33 +1,32 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import { Menu, Transition } from "@headlessui/react";
 import { useRouter, usePathname } from "next/navigation";
-import { Fragment } from "react";
-import Icon from "../../../../../ui/Icon";
-import { useGlobalContext } from "@/app/shared/contexts/GlobalProvider";
-import paths from "@/app/shared/routes/paths";
-import photoProfile from "@/app/shared/assets/img/contact.png";
 import Image from "next/image";
-import Text from "@/app/ui/Text";
-import Container from "@/app/ui/Container";
-import Button from "@/app/ui/Button";
+import { useGlobalContext } from "@/app/shared/contexts/GlobalProvider";
+import photoProfile from "@/app/shared/assets/img/contact.png";
 import { ButtonProps } from "@/app/ui/Button/Button.type";
 import DropdownMenu from "@/app/ui/DropdownMenu";
 import Item from "@/app/ui/DropdownMenu/Item";
+import paths from "@/app/shared/routes/paths";
+import Text from "@/app/ui/Text";
+import Icon from "@/app/ui/Icon";
 
 const MenuProfile = () => {
   const {
     auth: { setIsAuthenticated },
+    user: { user },
   } = useGlobalContext();
 
   const router = useRouter();
   const pathname = usePathname();
 
+  // remove token and change IsAuthenticated
   const handleLogOut = () => {
     setIsAuthenticated(false);
     localStorage.removeItem("token");
   };
 
+  // Dropdown options
   const menuItems: Array<ButtonProps> = [
     {
       text: "Gestionar cuenta",
@@ -68,7 +67,7 @@ const MenuProfile = () => {
             height={photoProfile.height}
           />
           <Text
-            text="Usuario Apellido"
+            text={user.name + " " + user.lastname}
             className="hidden md:block md:ml-2 truncate max-w-[8rem]"
           />
           <Icon

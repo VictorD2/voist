@@ -1,46 +1,56 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import ItemGroup from "./ItemGroup";
-import { ItemGroupType } from "./ItemGroup/ItemGroup.type";
-import { SidebarProps } from "./Sidebar.type";
-import styles from "./Sidebar.module.css";
-import logo from "@/app/shared/assets/img/logo.png";
-import logoCorto from "@/app/shared/assets/img/logo-corto.png";
-import { classNames } from "@/app/shared/utils/helpers";
-import Container from "@/app/ui/Container";
-import { paths } from "@/app/shared/routes/paths.user";
 import Image from "next/image";
+import logoCorto from "@/app/shared/assets/img/logo-corto.png";
+import { ItemGroupType } from "./ItemGroup/ItemGroup.type";
+import { classNames } from "@/app/shared/utils/helpers";
+import { paths } from "@/app/shared/routes/paths.user";
+import routes from "@/app/shared/routes/paths";
+import logo from "@/app/shared/assets/img/logo.png";
+import { SidebarProps } from "./Sidebar.type";
+import Container from "@/app/ui/Container";
+import styles from "./Sidebar.module.css";
+import ItemGroup from "./ItemGroup";
+import { useRouter } from "next/navigation";
 
 const navigation: Array<ItemGroupType> = paths;
 
-const Sidebar = ({ expand = true }: SidebarProps) => {
+const Sidebar = ({ expand = true, setExpand }: SidebarProps) => {
+  const router = useRouter();
+
+  const GoToRoot = () => router.push(routes.root);
+
   return (
     <Container position="relative" size={{ height: "h-full", width: "w-full" }}>
       {/* Logo */}
       <Container
-        position="absolute"
-        display="lg:block hidden"
         size={{ height: "h-16", width: "w-full" }}
-        bgColor="bg-white"
+        display="lg:block hidden"
         className="top-0 left-0"
+        position="absolute"
+        bgColor="bg-white"
       >
         <Container
-          display="flex"
+          border={{ size: "border-none", color: "border-primary" }}
+          size={{ height: "h-full" }}
           justify="justify-center"
           align="items-center"
-          size={{ height: "h-full" }}
-          border={{ size: "border-none", color: "border-primary" }}
+          display="flex"
         >
           {/* Logo Largo */}
           <Container
-            className={classNames(expand ? "flex" : "hidden group-hover:flex")}
-            display="flex"
+            className={classNames(
+              expand ? "flex" : "hidden group-hover:flex",
+              "cursor-pointer"
+            )}
             flexDirection="flex-row"
             align="items-center"
+            display="flex"
             gap="gap-2"
           >
             <Container
+              onClick={GoToRoot}
               font={{
                 color: "text-white",
                 weight: "font-bold",
@@ -48,29 +58,32 @@ const Sidebar = ({ expand = true }: SidebarProps) => {
               }}
             >
               <Image
-                src={logo.src}
-                width={logo.width}
                 height={logo.height}
+                width={logo.width}
                 alt="Voist's Logo"
+                src={logo.src}
               />
             </Container>
           </Container>
           {/* Logo Pequeño */}
           <Container
+            onClick={GoToRoot}
             className={classNames(
               !expand ? "flex group-hover:hidden" : "hidden",
-              "w-full flex-nowrap"
+              "cursor-pointer"
             )}
-            display="flex"
-            flexDirection="flex-row"
-            align="items-center"
+            size={{ width: "w-full" }}
             justify="justify-center"
+            flexDirection="flex-row"
+            flexWrap="flex-nowrap"
+            align="items-center"
+            display="flex"
             gap="gap-2"
           >
             <Image
-              src={logoCorto.src}
-              width={logoCorto.width}
               height={logoCorto.height}
+              width={logoCorto.width}
+              src={logoCorto.src}
               alt="Voist's Logo"
             />
           </Container>
@@ -78,10 +91,10 @@ const Sidebar = ({ expand = true }: SidebarProps) => {
       </Container>
       {/* Items */}
       <Container
-        display="flex"
-        bgColor="bg-white"
-        flexDirection="flex-col"
         size={{ height: "h-[calc(100%-4rem)]" }}
+        flexDirection="flex-col"
+        bgColor="bg-white"
+        display="flex"
         className={classNames(
           "lg:translate-y-16 -translate-y-0",
           styles.sidebar
@@ -96,10 +109,11 @@ const Sidebar = ({ expand = true }: SidebarProps) => {
           {navigation.map(({ separator, items }, index) => {
             return (
               <ItemGroup
-                items={items}
-                expand={expand}
-                separator={separator}
+                setExpand={setExpand}
                 key={index + separator}
+                separator={separator}
+                expand={expand}
+                items={items}
               />
             );
           })}
