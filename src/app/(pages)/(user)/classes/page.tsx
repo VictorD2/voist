@@ -139,11 +139,11 @@ const ClassesPage: NextPage = () => {
   const { mutate: createClassMutate } = useMutation<
     ClassApiResponse,
     Error,
-    Omit<ClassWithContacts, "filename" | "createdAt"> & { file?: File }
+    Omit<ClassWithContacts, "filename" | "createdAt"> & { file?: File | Blob }
   >(
     async (
       classData: Omit<ClassWithContacts, "filename" | "createdAt"> & {
-        file?: File;
+        file?: File | Blob;
       }
     ): Promise<ClassApiResponse> => {
       const { id, file, contacts, ...rest } = classData;
@@ -293,7 +293,7 @@ const ClassesPage: NextPage = () => {
   const onSubmitClass = (
     classe: Omit<ClassType, "filename" | "createdAt">,
     contacts: Array<UserType>,
-    file?: File
+    file?: File | Blob
   ) => {
     classSelected
       ? editClassMutate({ ...classe, contacts })

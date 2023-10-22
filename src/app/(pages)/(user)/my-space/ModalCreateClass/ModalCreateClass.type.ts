@@ -7,7 +7,7 @@ export type ModalCreateClassType = {
   onCreateClass?: (
     folder: Omit<ClassType, "filename" | "createdAt">,
     contacts: Array<UserType>,
-    file: File | undefined
+    file: File | undefined | Blob
   ) => void;
   owner?: UserType;
   userId?: number;

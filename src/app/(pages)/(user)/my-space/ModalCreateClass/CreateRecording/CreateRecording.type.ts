@@ -1,4 +1,4 @@
 export type CreateRecordingProps = {
   audioName?: string;
-  getAudio?: (audio: Blob[]) => void;
+  getAudio?: (audio: Blob) => void;
 };

@@ -44,7 +44,8 @@ const ModalCreateClass: FC<ModalCreateClassType> = (props) => {
   const [filter, setFilter] = useState(""); // We use this to filter in Contacts List
   const [isEditingTitle, setIsEditingTitle] = useState<boolean>(false); //To change the behavior of the name of the folder
   const [fase, setFase] = useState<FaseType>("SETTING");
-  const [file, setFile] = useState<File>();
+  // const [file, setFile] = useState<File>();
+  const [arrayBuffer, setArrayBuffer] = useState<Blob>();
   // Method to handle behavior folder's title
   const handleChangeIsEditing = () => setIsEditingTitle((state) => !state);
 
@@ -115,34 +116,35 @@ const ModalCreateClass: FC<ModalCreateClassType> = (props) => {
       handleSubmit(() => {
         const { contacts, ...rest } = watch();
         // We send the folder properties and contacts shared
-        onCreateClass(rest, contacts, file);
+        onCreateClass(rest, contacts, arrayBuffer);
       })();
     }
   };
 
-  const handleAudioSubmit = (audio: Blob[]) => {
-    const encabezado = new ArrayBuffer(44);
-    const vistaEncabezado = new DataView(encabezado);
-    vistaEncabezado.setUint32(0, 0x52494646, true);
-    vistaEncabezado.setUint32(8, 0x57415645, true);
-    vistaEncabezado.setUint32(12, 0x666D7420, true);
-    vistaEncabezado.setUint32(16, 16, true);
-    vistaEncabezado.setUint16(20, 1, true);
-    vistaEncabezado.setUint16(22, 1, true);
-    vistaEncabezado.setUint32(24, 44100, true);
-    vistaEncabezado.setUint32(28, 44100 * 1 * 16, true);
-    vistaEncabezado.setUint16(32, 2, true);
-    vistaEncabezado.setUint16(34, 16, true);
-    vistaEncabezado.setUint32(36, 0x64617461, true);
-    vistaEncabezado.setUint32(40, audio.length * 2, true);
+  const handleAudioSubmit = (audio: Blob) => {
+    // const encabezado = new ArrayBuffer(44);
+    // const vistaEncabezado = new DataView(encabezado);
+    // vistaEncabezado.setUint32(0, 0x52494646, true);
+    // vistaEncabezado.setUint32(8, 0x57415645, true);
+    // vistaEncabezado.setUint32(12, 0x666D7420, true);
+    // vistaEncabezado.setUint32(16, 16, true);
+    // vistaEncabezado.setUint16(20, 1, true);
+    // vistaEncabezado.setUint16(22, 1, true);
+    // vistaEncabezado.setUint32(24, 44100, true);
+    // vistaEncabezado.setUint32(28, 44100 * 1 * 16, true);
+    // vistaEncabezado.setUint16(32, 2, true);
+    // vistaEncabezado.setUint16(34, 16, true);
+    // vistaEncabezado.setUint32(36, 0x64617461, true);
+    // vistaEncabezado.setUint32(40, audio.length * 2, true);
 
 
-    const blobData = new Blob([vistaEncabezado, ...audio], { type: "audio/wav" });
-    const archivo = new File([blobData], "mi-audio.wav", {
-      type: "audio/wav",
-      endings: "native",
-    });
-    setFile(archivo);
+    // const blobData = new Blob([vistaEncabezado, ...audio], { type: "audio/wav" });
+    // const archivo = new File([blobData], "mi-audio.wav", {
+    //   type: "audio/wav",
+    //   endings: "native",
+    // });
+    // setFile(archivo);
+    setArrayBuffer(audio);
     setFase("CREATED");
   };
 

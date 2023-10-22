@@ -32,9 +32,10 @@ export const getClassService = async (
 export const createClassService = async (
   classe: Omit<ClassType, "id" | "filename" | "createdAt">,
   contacts: Array<number>,
-  file?: File
+  file?: File | Blob
 ): Promise<ClassApiResponse> => {
   const formData = new FormData();
+  console.log(file);
   if (file) formData.append("file", file);
   formData.append("name", classe.name);
   formData.append("userId", classe.userId + "");
