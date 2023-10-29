@@ -56,7 +56,11 @@ const ModalCreateFolder: FC<ModalCreateFolderType> = (props) => {
     handleSubmit,
     watch,
     setValue,
-  } = useForm<FolderType & { contacts: Array<UserType> }>({
+  } = useForm<
+    FolderType & {
+      contacts: Array<Omit<UserType, "role" | "roleId" | "state">>;
+    }
+  >({
     resolver: FolderResolver,
     defaultValues: {
       id: defaultValues.id,

@@ -317,7 +317,7 @@ const ClassesPage: NextPage = () => {
   }, [params.get("folder")]);
 
   // Submit form folder modal
-  const onSubmitFolder = (folder: FolderType, contacts: Array<UserType>) => {
+  const onSubmitFolder = (folder: FolderType, contacts: Array<Omit<UserType, "role" | "roleId" | "state">>) => {
     folderSelected
       ? editFolderMutate({ ...folder, contacts })
       : createFolderMutate({ ...folder, contacts });

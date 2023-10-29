@@ -84,7 +84,7 @@ const ContactsPage: NextPage = () => {
     }
   );
 
-  const handleConfirmDelete = (user: UserType) => {
+  const handleConfirmDelete = (user: Omit<UserType, "state" | "role" | "roleId">) => {
     setShowConfirm(true);
     setContactSelected(user);
   };
