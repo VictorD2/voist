@@ -38,7 +38,11 @@ const config: Config = {
       violet: colors.violet,
       zinc: colors.zinc,
     },
-    extend: {},
+    extend: {
+      fontFamily: {
+        'poppins': ['Poppins', 'sans-serif'],
+      },
+    },
   },
   plugins: [require("tailwind-scrollbar")],
 }

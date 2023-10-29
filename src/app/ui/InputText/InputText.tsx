@@ -142,6 +142,7 @@ const InputText: FC<InputTextProps> = (props) => {
             display="flex"
             position="relative"
             size={{ width: "w-full" }}
+            align="items-center"
           >
             {/* Input Text */}
             <input
@@ -173,7 +174,7 @@ const InputText: FC<InputTextProps> = (props) => {
                     font={fontStyle}
                     remixicon={responsiveIcon ? responsiveIcon : ""}
                     onClick={handleEventResponsiveIcon}
-                    className="w-1 absolute lg:hidden md:hidden my-auto top-[5px] right-6 cursor-pointer"
+                    className="w-1 absolute lg:hidden md:hidden my-auto top-[6px] right-6 cursor-pointer"
                   />
                 )}
                 {floatIcon && (
@@ -181,7 +182,7 @@ const InputText: FC<InputTextProps> = (props) => {
                     font={fontStyle}
                     remixicon={floatIcon ? floatIcon : ""}
                     onClick={handleEventFloatIcon}
-                    className="w-1 absolute my-auto top-[5px] right-6 cursor-pointer"
+                    className="w-1 absolute my-auto top-[6px] right-6 cursor-pointer"
                   />
                 )}
               </>

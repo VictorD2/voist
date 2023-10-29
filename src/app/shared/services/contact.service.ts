@@ -2,14 +2,25 @@ import { AxiosResponse } from "axios";
 import axios from "../utils/axios";
 import { UserType } from "../types/user.type";
 
-const api = "/api/v1/contact";
+const api = "/api/v0/contacts";
 
 export type ContactApiResponse = AxiosResponse<UserType, UserType>;
+export type ContactsApiResponse = AxiosResponse<
+  Array<UserType>,
+  Array<UserType>
+>;
 export type ContactApiDeleteResponse = AxiosResponse<number, number>;
 
 // Service Get My Contact
-export const getContactService = async (): Promise<ContactApiResponse> => {
+export const getMyContactService = async (): Promise<ContactApiResponse> => {
   return axios.get(`${api}`);
+};
+
+// Service Get Users
+export const getAllContactsService = async (
+  filter: string
+): Promise<ContactsApiResponse> => {
+  return axios.get(`${api}/all?filter=${filter}`);
 };
 
 // Service Create Contact

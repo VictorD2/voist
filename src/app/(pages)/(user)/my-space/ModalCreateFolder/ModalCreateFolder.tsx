@@ -2,7 +2,7 @@
 import { Controller, useForm } from "react-hook-form";
 import { FC, useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { getContactService } from "@/app/shared/services/contact.service";
+import { getMyContactService } from "@/app/shared/services/contact.service";
 import ClickOutSideComponent from "@/app/shared/hooks/useClickOutside";
 import { ModalCreateFolderType } from "./ModalCreateFolder.type";
 import { FolderResolver } from "./ModalCreateFolder.yup";
@@ -97,7 +97,7 @@ const ModalCreateFolder: FC<ModalCreateFolderType> = (props) => {
   const { refetch } = useQuery<any>(
     "GET-CONTACTS",
     async () => {
-      return await getContactService();
+      return await getMyContactService();
     },
     {
       onSuccess: ({ data }) => {

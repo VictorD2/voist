@@ -9,6 +9,7 @@ const Text: React.FC<TextProps> = (props) => {
     font = {},
     display = "",
     size = {},
+    children,
     separator = {},
     ...rest
   } = props;
@@ -43,6 +44,7 @@ const Text: React.FC<TextProps> = (props) => {
       {...rest}
     >
       {text}
+      {children}
     </p>
   );
 };

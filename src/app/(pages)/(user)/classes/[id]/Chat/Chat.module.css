@@ -1,0 +1,17 @@
+.chat:hover .chatScroll::-webkit-scrollbar-thumb {
+    background: #dcdcdc;
+  }
+  
+  .chatScroll::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  .chatScroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .chatScroll::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 99px;
+  }
+  
