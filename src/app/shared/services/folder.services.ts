@@ -3,7 +3,7 @@ import axios from "../utils/axios";
 import { FolderType } from "../types/folder.type";
 import { UserType } from "../types/user.type";
 
-const api = "/api/v1/folder";
+const api = "/api/v0/folders";
 
 export type FolderApiResponse = AxiosResponse<
   FolderType & { contacts: Array<UserType> },
@@ -30,7 +30,7 @@ export const getFolderService = async (
 
 // Service Create Folder
 export const createFolderService = async (
-  folder: Omit<FolderType, "id">,
+  folder: Omit<FolderType, "id" | "userId">,
   contacts: Array<number>
 ): Promise<FolderApiResponse> => {
   return axios.post(`${api}`, { ...folder, contacts });
@@ -41,7 +41,8 @@ export const updateFolderService = async (
   folder: Omit<FolderType, "userId" | "folderId">,
   contacts: Array<number>
 ): Promise<FolderApiResponse> => {
-  return axios.put(`${api}/${folder.id}`, { ...folder, contacts });
+  const { id, ...rest } = folder;
+  return axios.patch(`${api}/${folder.id}`, { ...rest, contacts });
 };
 
 // Service Delete Folder

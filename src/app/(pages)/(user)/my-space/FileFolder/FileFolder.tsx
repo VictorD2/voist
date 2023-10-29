@@ -34,33 +34,39 @@ const FileFolder: FC<FileFolderProps> = (props) => {
       gap="gap-5"
       transition
     >
-      <Container onClick={handleClickFileFolder} className="cursor-pointer">
-        <Icon
-          font={{
-            color: isFile ? "text-primary" : "text-gray-500",
-            size: "text-5xl",
-          }}
-          remixicon={isFile ? "ri-file-3-fill" : "ri-folder-fill"}
-        />
+      <Container
+        display="flex"
+        flexDirection="flex-row"
+        flexWrap="flex-nowrap"
+        gap="gap-5"
+      >
+        <Container onClick={handleClickFileFolder} className="cursor-pointer">
+          <Icon
+            font={{
+              color: isFile ? "text-primary" : "text-gray-500",
+              size: "text-5xl",
+            }}
+            remixicon={isFile ? "ri-file-3-fill" : "ri-folder-fill"}
+          />
+        </Container>
+        <Container className="overflow-hidden">
+          <Text
+            text={title}
+            font={{
+              whiteSpace: "whitespace-nowrap",
+              wordBreak: "break-keep",
+              weight: "font-semibold",
+            }}
+          />
+          <Text
+            font={{
+              whiteSpace: "whitespace-nowrap",
+              wordBreak: "break-keep",
+            }}
+            text={`Ult. act: ${moment(updatedAt).format("DD/MM/YYYY")}`}
+          />
+        </Container>
       </Container>
-      <Container className="overflow-hidden">
-        <Text
-          text={title}
-          font={{
-            whiteSpace: "whitespace-nowrap",
-            wordBreak: "break-keep",
-            weight: "font-semibold",
-          }}
-        />
-        <Text
-          font={{
-            whiteSpace: "whitespace-nowrap",
-            wordBreak: "break-keep",
-          }}
-          text={`Ult. act: ${moment(updatedAt).format("DD/MM/YYYY")}`}
-        />
-      </Container>
-
       <DropdownMenu
         positionAbs="-top-1 -right-[10.7rem]"
         bgColor="bg-transparent"

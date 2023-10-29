@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { toast } from "react-toastify";
 import { NextPage } from "next";
+import audioBufferToWav from "audiobuffer-to-wav";
 import { useGlobalContext } from "@/app/shared/contexts/GlobalProvider";
 import ModalCreateFolder from "../my-space/ModalCreateFolder";
 import { getErrorResponse } from "@/app/shared/utils/helpers";
@@ -34,8 +35,10 @@ import {
 } from "@/app/shared/services/folder.services";
 import {
   ClassApiResponse,
+  ClassesApiResponse,
   createClassService,
   deleteClassService,
+  getClassesService,
   updateClassService,
 } from "@/app/shared/services/class.services";
 
@@ -44,8 +47,21 @@ interface Link {
   link: string;
 }
 
-type FolderWithContacts = FolderType & { contacts: Array<UserType> };
-type ClassWithContacts = ClassType & { contacts: Array<UserType> };
+type FolderWithContacts = FolderType & {
+  contacts: Array<Omit<UserType, "roleId" | "state">>;
+};
+type ClassWithContacts = Omit<
+  ClassType,
+  | "filename"
+  | "createdAt"
+  | "duration"
+  | "resume"
+  | "url_pdf"
+  | "url_audio"
+  | "userId"
+> & {
+  contacts: Array<Omit<UserType, "roleId" | "state">>;
+};
 
 const ClassesPage: NextPage = () => {
   const params = useSearchParams();
@@ -114,7 +130,7 @@ const ClassesPage: NextPage = () => {
     FolderWithContacts
   >(
     async (folderData: FolderWithContacts): Promise<FolderApiResponse> => {
-      const { id, contacts, ...rest } = folderData;
+      const { id, contacts, userId, ...rest } = folderData;
       return await createFolderService(
         {
           ...rest,
@@ -139,21 +155,26 @@ const ClassesPage: NextPage = () => {
   const { mutate: createClassMutate } = useMutation<
     ClassApiResponse,
     Error,
-    Omit<ClassWithContacts, "filename" | "createdAt"> & { file?: File | Blob }
+    ClassWithContacts & { file?: File | Blob }
   >(
     async (
-      classData: Omit<ClassWithContacts, "filename" | "createdAt"> & {
+      classData: ClassWithContacts & {
         file?: File | Blob;
       }
     ): Promise<ClassApiResponse> => {
       const { id, file, contacts, ...rest } = classData;
+      const arrayBuffer = await file!.arrayBuffer();
+      const audioContext = new AudioContext();
+      const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+      const wavBlob = audioBufferToWav(audioBuffer);
+      const audioBlob2 = new Blob([wavBlob], { type: "audio/wav" });
       return await createClassService(
         {
           ...rest,
           folderId: Number(params.get("folder")),
         },
         contacts.map((item) => item.id),
-        file
+        audioBlob2
       );
     },
     {
@@ -202,12 +223,10 @@ const ClassesPage: NextPage = () => {
   const { mutate: editClassMutate } = useMutation<
     ClassApiResponse,
     Error,
-    Omit<ClassWithContacts, "filename" | "createdAt">
+    ClassWithContacts
   >(
-    async (
-      classData: Omit<ClassWithContacts, "filename" | "createdAt">
-    ): Promise<ClassApiResponse> => {
-      const { folderId, contacts, userId, ...rest } = classData;
+    async (classData: ClassWithContacts): Promise<ClassApiResponse> => {
+      const { folderId, contacts, ...rest } = classData;
       return await updateClassService(
         rest,
         contacts.map((item) => item.id)
@@ -277,8 +296,23 @@ const ClassesPage: NextPage = () => {
     }
   );
 
+  // Get folders request
+  const { refetch: refetchClasses } = useQuery<ClassesApiResponse>(
+    "GET-CLASSES",
+    async () => {
+      return await getClassesService(Number(params.get("folder")));
+    },
+    {
+      onSuccess: ({ data }) => {
+        setClasses(data);
+      },
+      onError: () => {},
+    }
+  );
+
   useEffect(() => {
     refetch();
+    refetchClasses();
     return () => {};
   }, [params.get("folder")]);
 
@@ -291,8 +325,17 @@ const ClassesPage: NextPage = () => {
 
   // Submit form class modal
   const onSubmitClass = (
-    classe: Omit<ClassType, "filename" | "createdAt">,
-    contacts: Array<UserType>,
+    classe: Omit<
+      ClassType,
+      | "filename"
+      | "createdAt"
+      | "duration"
+      | "resume"
+      | "url_pdf"
+      | "url_audio"
+      | "userId"
+    >,
+    contacts: Array<Omit<UserType, "roleId" | "state">>,
     file?: File | Blob
   ) => {
     classSelected
@@ -307,19 +350,42 @@ const ClassesPage: NextPage = () => {
     };
   };
 
-  // When we open the modal to edit
-  const handleOpenModalEdit = (folder: FolderWithContacts) => {
+  // Change Folder url
+  const handleGoFile = (id: string) => {
+    return () => {
+      router.push(paths.class(String(id)));
+    };
+  };
+
+  // When we open the modal to edit folder
+  const handleOpenModalFolderEdit = (folder: FolderWithContacts) => {
     return () => {
       setShowModalAddFolder(true);
       setFolderSelected(folder);
     };
   };
 
+  // When we open the modal to edit
+  const handleOpenModalClassEdit = (classe: ClassWithContacts) => {
+    return () => {
+      setShowModalAddClass(true);
+      setClassSelected(classe);
+    };
+  };
+
   // Whe we open the confirm modal
-  const handleConfirmDelete = (folder: FolderWithContacts) => {
+  const handleConfirmDeleteFolder = (folder: FolderWithContacts) => {
     return () => {
       setShowConfirmFolder(true);
       setFolderSelected(folder);
+    };
+  };
+
+  // Whe we open the confirm modal
+  const handleConfirmDeleteClass = (classe: ClassWithContacts) => {
+    return () => {
+      setShowConfirmClass(true);
+      setClassSelected(classe);
     };
   };
 
@@ -373,7 +439,7 @@ const ClassesPage: NextPage = () => {
         size={{ width: "w-full" }}
         display="flex"
         flexDirection="flex-row"
-        flexWrap="flex-nowrap"
+        flexWrap="flex-wrap"
         gap="gap-4"
       >
         <DropdownMenu
@@ -384,9 +450,9 @@ const ClassesPage: NextPage = () => {
           buttonNode={
             <Button
               onClick={() => setMenuModalAdd((state) => !state)}
-              font={{ color: "group-hover:text-white text-black" }}
-              border={{ size: "border", color: "border-gray-200" }}
-              bgColor="bg-white hover:bg-primary"
+              font={{ color: "group-hover:text-primary text-white" }}
+              border={{ size: "border", color: "border-primary" }}
+              bgColor="bg-primary hover:bg-white"
               remixicon="ri-add-line"
               size={{ width: "" }}
               className="group"
@@ -405,6 +471,7 @@ const ClassesPage: NextPage = () => {
           border={{ size: "border", color: "border-gray-200" }}
           remixicon="ri-filter-line"
           text="Añadir filtros"
+          font={{ whiteSpace: "whitespace-nowrap" }}
           size={{ width: "" }}
           bgColor="bg-white"
           ripples={false}
@@ -414,6 +481,7 @@ const ClassesPage: NextPage = () => {
           border={{ size: "border", color: "border-gray-200" }}
           text="Ordenar por más recientes"
           remixicon="ri-sort-desc"
+          font={{ whiteSpace: "whitespace-nowrap" }}
           size={{ width: "" }}
           toggle={isActived}
           bgColor="bg-white"
@@ -449,7 +517,7 @@ const ClassesPage: NextPage = () => {
                   font: {
                     size: "text-sm",
                   },
-                  onClick: handleOpenModalEdit(item),
+                  onClick: handleOpenModalFolderEdit(item),
                 },
                 {
                   text: "Eliminar",
@@ -458,12 +526,48 @@ const ClassesPage: NextPage = () => {
                     size: "text-sm",
                     color: "text-white",
                   },
-                  onClick: handleConfirmDelete(item),
+                  onClick: handleConfirmDeleteFolder(item),
                 },
               ]}
               key={item.id + item.name}
               id={item.id}
               isFile={false}
+              title={item.name}
+              updatedAt={item.updatedAt + ""}
+            />
+          );
+        })}
+        {classes.map((item) => {
+          return (
+            <FileFolder
+              options={[
+                {
+                  text: "Abrir Grabación",
+                  font: {
+                    size: "text-sm",
+                  },
+                  onClick: handleGoFile(item.id + ""),
+                },
+                {
+                  text: "Editar Configuración",
+                  font: {
+                    size: "text-sm",
+                  },
+                  onClick: handleOpenModalClassEdit(item),
+                },
+                {
+                  text: "Eliminar",
+                  bgColor: "bg-red-400 hover:bg-red-500",
+                  font: {
+                    size: "text-sm",
+                    color: "text-white",
+                  },
+                  onClick: handleConfirmDeleteClass(item),
+                },
+              ]}
+              key={item.id + item.name}
+              id={item.id}
+              isFile={true}
               title={item.name}
               updatedAt={item.updatedAt + ""}
             />

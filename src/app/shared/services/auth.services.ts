@@ -4,7 +4,7 @@ import { UserType } from "../types/user.type";
 import { LoginType } from "@/app/(pages)/(auth)/login/types/type";
 import { RegisterType } from "@/app/(pages)/(auth)/register/types/type";
 
-const api = "/api/v1/auth";
+const api = "/api/v0/auth";
 
 interface LoginResponse {
   user: UserType;

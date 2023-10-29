@@ -18,10 +18,10 @@ const ContactShared: FC<ContactSharedProps> = (props) => {
       align="items-center"
       separator={{ padding: "py-2 px-4" }}
       rounded="rounded-2xl"
-      gap="gap-2"
+      gap="gap-4"
     >
       <Container
-        className="col-span-1"
+        className="xl:col-span-1 lg:col-span-1 md:col-span-2 col-span-2"
         rounded="rounded-full"
         bgColor="bg-primary"
         display="flex"
@@ -37,7 +37,7 @@ const ContactShared: FC<ContactSharedProps> = (props) => {
         />
       </Container>
       <Text
-        className="text-ellipsis overflow-hidden col-span-4"
+        className="text-ellipsis overflow-hidden xl:col-span-4 lg:col-span-4 md:col-span-3 col-span-6"
         font={{
           whiteSpace: "whitespace-nowrap",
           size: "text-sm",
@@ -47,6 +47,7 @@ const ContactShared: FC<ContactSharedProps> = (props) => {
       />
       <Text
         className="text-ellipsis overflow-hidden col-span-4"
+        display="2xl:flex xl:flex lg:flex md:flex hidden"
         font={{
           color: "text-gray-500",
           size: "text-xs",
@@ -55,7 +56,7 @@ const ContactShared: FC<ContactSharedProps> = (props) => {
         text={email}
       />
       <Text
-        className="text-ellipsis overflow-hidden col-span-2"
+        className="text-ellipsis overflow-hidden xl:col-span-3 lg:col-span-3 md:col-span-2 col-span-4"
         font={{
           color: "text-primary",
           textTransform: "uppercase",

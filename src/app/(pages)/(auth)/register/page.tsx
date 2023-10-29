@@ -81,6 +81,7 @@ const RegisterPage: NextPage = () => {
     },
     {
       onSuccess: ({ data: { token, user } }) => {
+        console.log(token, user);
         setIsAuthenticated(true);
         setUser(user);
         localStorage.setItem("token", token);

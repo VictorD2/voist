@@ -1,6 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NextPage } from "next";
+import moment from "moment";
 import Breadcrumbs from "@/app/ui/Breadcrumbs";
 import paths from "@/app/shared/routes/paths";
 import Transcription from "./Transcription";
@@ -9,17 +11,106 @@ import Button from "@/app/ui/Button";
 import Text from "@/app/ui/Text";
 import Summary from "./Summary";
 import Chat from "./Chat";
+import { useParams } from "next/navigation";
+import { useMutation, useQuery } from "react-query";
+import {
+  createChatResumen,
+  getChatResumen,
+  getClassService,
+} from "@/app/shared/services/class.services";
+import { ClassType } from "@/app/shared/types/class.type";
+import { UserType } from "@/app/shared/types/user.type";
+import Adjuntos from "./Adjuntos";
+import { AxiosResponse } from "axios";
+import { getErrorResponse } from "@/app/shared/utils/helpers";
 
 const ClassPage: NextPage = () => {
-  type MODE = "SUMMARY" | "TRANSCRIPTION" | "CHAT";
+  const params = useParams();
+  type MODE = "SUMMARY" | "TRANSCRIPTION" | "CHAT" | "ADJUNTOS";
 
   const [mode, setMode] = useState<MODE>("SUMMARY");
+  const [classe, setClasse] = useState<
+    ClassType & { contacts: Array<UserType> }
+  >({
+    id: 0,
+    createdAt: "",
+    duration: "",
+    filename: "",
+    folderId: 0,
+    name: "",
+    resume: "",
+    updatedAt: "",
+    url_audio: "",
+    url_pdf: "",
+    contacts: [],
+    userId: 0,
+  });
+
+  // Getting contacts
+  const { refetch } = useQuery<any>(
+    "GET-CONTACTS",
+    async () => {
+      return await getClassService(+params.id);
+    },
+    {
+      onSuccess: ({ data }) => {
+        setClasse(data);
+        if (data.resume === "") {
+          getResumenChat(data.url_pdf);
+        }
+      },
+      onError: () => {},
+    }
+  );
+
+  // Flask api
+  const { mutate: getResumenChat, isLoading: isLoadingFlaskApiResumen } =
+    useMutation<
+      AxiosResponse<{ answer: string }, { answer: string }>,
+      Error,
+      string
+    >(
+      async (urlPdf): Promise<AxiosResponse<{ answer: string }>> => {
+        return await getChatResumen(urlPdf);
+      },
+      {
+        onSuccess: ({ data: { answer } }) => {
+          createResumenChat(answer);
+        },
+        onError: (error: any) => {},
+      }
+    );
+
+  // Nest api
+  const {
+    mutate: createResumenChat,
+    isLoading: isLoadingNestApiCreateResumen,
+  } = useMutation<AxiosResponse<string, string>, Error, string>(
+    async (content): Promise<AxiosResponse<string>> => {
+      return await createChatResumen(content, classe.id);
+    },
+    {
+      onSuccess: ({ data }) => {
+        setClasse({ ...classe, resume: data });
+      },
+      onError: (error: any) => {},
+    }
+  );
 
   const handleChangeMode = (mod: MODE) => {
     return () => {
       setMode(mod);
     };
   };
+
+  useEffect(() => {
+    refetch();
+    return () => {};
+  }, []);
+
+  if (classe.id === 0) {
+    return <></>;
+  }
 
   return (
     <Container>
@@ -34,7 +125,7 @@ const ClassPage: NextPage = () => {
         <Breadcrumbs
           routes={[
             { link: paths.classes, name: "Mis clases" },
-            { link: paths.class("1"), name: "Grabación 1" },
+            { link: paths.class(classe.id + ""), name: classe.name },
           ]}
         />
       </Container>
@@ -78,11 +169,7 @@ const ClassPage: NextPage = () => {
                 size={{ width: "" }}
                 display="inline"
               />
-              <Text
-                text="Mi grabación 1"
-                size={{ width: "" }}
-                display="inline"
-              />
+              <Text text={classe.name} size={{ width: "" }} display="inline" />
             </Container>
             <Container>
               <Text
@@ -94,10 +181,14 @@ const ClassPage: NextPage = () => {
                 size={{ width: "" }}
                 display="inline"
               />
-              <Text text="12/09/23" size={{ width: "" }} display="inline" />
+              <Text
+                text={moment(classe.createdAt).format("DD/MM/YYYY")}
+                size={{ width: "" }}
+                display="inline"
+              />
             </Container>
             <Container>
-              <Text
+              {/* <Text
                 text="Hora inicio: "
                 font={{
                   weight: "font-semibold",
@@ -106,10 +197,10 @@ const ClassPage: NextPage = () => {
                 size={{ width: "" }}
                 display="inline"
               />
-              <Text text="16:20:00 hrs" size={{ width: "" }} display="inline" />
+              <Text text="16:20:00 hrs" size={{ width: "" }} display="inline" /> */}
             </Container>
             <Container>
-              <Text
+              {/* <Text
                 text="Hora fin: "
                 font={{
                   weight: "font-semibold",
@@ -118,7 +209,7 @@ const ClassPage: NextPage = () => {
                 size={{ width: "" }}
                 display="inline"
               />
-              <Text text="17:20:00 hrs" size={{ width: "" }} display="inline" />
+              <Text text="17:20:00 hrs" size={{ width: "" }} display="inline" /> */}
             </Container>
             <Container>
               <Text
@@ -131,15 +222,17 @@ const ClassPage: NextPage = () => {
                 display="inline"
               />
               <Container as="ul">
-                <Container as="li" font={{ indentText: "indent-4" }}>
-                  {"* Juan Alva"}
-                </Container>
-                <Container as="li" font={{ indentText: "indent-4" }}>
-                  {"* Maria Vega"}
-                </Container>
-                <Container as="li" font={{ indentText: "indent-4" }}>
-                  {"* Camila Silva"}
-                </Container>
+                {classe.contacts.map((item) => {
+                  return (
+                    <Container
+                      key={item.name + item.id}
+                      as="li"
+                      font={{ indentText: "indent-4" }}
+                    >
+                      {`* ${item.name} ${item.lastname}`}
+                    </Container>
+                  );
+                })}
               </Container>
             </Container>
           </Container>
@@ -204,12 +297,43 @@ const ClassPage: NextPage = () => {
                 size: "border",
               }}
             />
+            <Button
+              bgColor="hover:bg-primary bg-white"
+              onClick={handleChangeMode("ADJUNTOS")}
+              toggle={mode === "ADJUNTOS"}
+              remixicon="ri-folder-2-line"
+              justify="justify-start"
+              size={{ width: "w-60" }}
+              rounded="rounded-lg"
+              className="group"
+              text="Archivos adjuntos"
+              gap="gap-5"
+              font={{
+                color: "group-hover:text-white text-gray-900",
+                size: "text-lg",
+              }}
+              border={{
+                color: "border-gray-200",
+                size: "border",
+              }}
+            />
           </Container>
         </Container>
+
         <Container size={{ width: "w-full" }}>
-          {mode === "SUMMARY" && <Summary />}
-          {mode === "TRANSCRIPTION" && <Transcription />}
-          {mode === "CHAT" && <Chat />}
+          {mode === "SUMMARY" && (
+            <Summary
+              isLoading={
+                isLoadingFlaskApiResumen || isLoadingNestApiCreateResumen
+              }
+              resume={classe.resume}
+            />
+          )}
+          {mode === "ADJUNTOS" && <Adjuntos />}
+          {mode === "TRANSCRIPTION" && <Transcription url={classe.url_pdf} />}
+          {mode === "CHAT" && (
+            <Chat urlPdf={classe.url_pdf} classId={classe.id} />
+          )}
         </Container>
       </Container>
     </Container>

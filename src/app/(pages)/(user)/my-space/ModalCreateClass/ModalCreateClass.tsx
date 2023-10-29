@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useForm, Controller } from "react-hook-form";
-import { FC, useEffect, useRef, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
-import { getContactService } from "@/app/shared/services/contact.service";
+import { getMyContactService } from "@/app/shared/services/contact.service";
 import ClickOutSideComponent from "@/app/shared/hooks/useClickOutside";
 import { ModalCreateClassType } from "./ModalCreateClass.type";
 import { ClassType } from "@/app/shared/types/class.type";
@@ -15,8 +15,8 @@ import Button from "@/app/ui/Button";
 import Text from "@/app/ui/Text";
 import List from "@/app/ui/List";
 import Icon from "@/app/ui/Icon";
-import { toast } from "react-toastify";
 import CreateRecording from "./CreateRecording";
+import { toast } from "react-toastify";
 
 const ModalCreateClass: FC<ModalCreateClassType> = (props) => {
   type FaseType = "SETTING" | "RECORDING" | "CREATED";
@@ -43,11 +43,33 @@ const ModalCreateClass: FC<ModalCreateClassType> = (props) => {
   const [showListSearch, setShowListSearch] = useState<boolean>(false); //Contacts Search List
   const [filter, setFilter] = useState(""); // We use this to filter in Contacts List
   const [isEditingTitle, setIsEditingTitle] = useState<boolean>(false); //To change the behavior of the name of the folder
-  const [fase, setFase] = useState<FaseType>("SETTING");
+  const [fase, setFase] = useState<FaseType>(
+    defaultValues.id === 0 ? "SETTING" : "CREATED"
+  );
+  const fileInput = useRef<HTMLInputElement>(null);
   // const [file, setFile] = useState<File>();
-  const [arrayBuffer, setArrayBuffer] = useState<Blob>();
+  const [arrayBuffer, setArrayBuffer] = useState<Blob | File>();
   // Method to handle behavior folder's title
   const handleChangeIsEditing = () => setIsEditingTitle((state) => !state);
+
+  const handleClickUploadAudio = () => {
+    if (fileInput.current) {
+      fileInput.current.click();
+    }
+  };
+
+  const handleChangeInputAudio = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.currentTarget.files
+      ? e.currentTarget.files[0]
+      : undefined;
+    if (selectedFile) {
+      if (selectedFile.type !== "audio/wav")
+        return toast.warning("El formato de audio debe ser .wav");
+      setArrayBuffer(selectedFile);
+      setFase("CREATED");
+      // Puedes realizar acciones con el archivo seleccionado aquí
+    }
+  };
 
   // To manage the value of filter
   const handleChangeInputSearch = async (
@@ -75,7 +97,7 @@ const ModalCreateClass: FC<ModalCreateClassType> = (props) => {
   const { refetch } = useQuery<any>(
     "GET-CONTACTS",
     async () => {
-      return await getContactService();
+      return await getMyContactService();
     },
     {
       onSuccess: ({ data }) => {
@@ -98,7 +120,18 @@ const ModalCreateClass: FC<ModalCreateClassType> = (props) => {
     watch,
     setValue,
   } = useForm<
-    Omit<ClassType, "filename" | "createdAt"> & { contacts: Array<UserType> }
+    Omit<
+      ClassType,
+      | "filename"
+      | "createdAt"
+      | "duration"
+      | "updatedAt"
+      | "url_pdf"
+      | "resume"
+      | "url_audio"
+    > & {
+      contacts: Array<Omit<UserType, "roleId" | "state">>;
+    }
   >({
     resolver: ClassResolver,
     defaultValues: {
@@ -114,7 +147,7 @@ const ModalCreateClass: FC<ModalCreateClassType> = (props) => {
   const handleFormSubmit = () => {
     if (onCreateClass) {
       handleSubmit(() => {
-        const { contacts, ...rest } = watch();
+        const { contacts, userId, ...rest } = watch();
         // We send the folder properties and contacts shared
         onCreateClass(rest, contacts, arrayBuffer);
       })();
@@ -122,28 +155,6 @@ const ModalCreateClass: FC<ModalCreateClassType> = (props) => {
   };
 
   const handleAudioSubmit = (audio: Blob) => {
-    // const encabezado = new ArrayBuffer(44);
-    // const vistaEncabezado = new DataView(encabezado);
-    // vistaEncabezado.setUint32(0, 0x52494646, true);
-    // vistaEncabezado.setUint32(8, 0x57415645, true);
-    // vistaEncabezado.setUint32(12, 0x666D7420, true);
-    // vistaEncabezado.setUint32(16, 16, true);
-    // vistaEncabezado.setUint16(20, 1, true);
-    // vistaEncabezado.setUint16(22, 1, true);
-    // vistaEncabezado.setUint32(24, 44100, true);
-    // vistaEncabezado.setUint32(28, 44100 * 1 * 16, true);
-    // vistaEncabezado.setUint16(32, 2, true);
-    // vistaEncabezado.setUint16(34, 16, true);
-    // vistaEncabezado.setUint32(36, 0x64617461, true);
-    // vistaEncabezado.setUint32(40, audio.length * 2, true);
-
-
-    // const blobData = new Blob([vistaEncabezado, ...audio], { type: "audio/wav" });
-    // const archivo = new File([blobData], "mi-audio.wav", {
-    //   type: "audio/wav",
-    //   endings: "native",
-    // });
-    // setFile(archivo);
     setArrayBuffer(audio);
     setFase("CREATED");
   };
@@ -277,13 +288,33 @@ const ModalCreateClass: FC<ModalCreateClassType> = (props) => {
         )}
         {/* Button Submit */}
         {fase === "SETTING" && (
-          <Button
-            font={{ color: "text-white", weight: "font-semibold" }}
-            text="Iniciar Grabación"
-            onClick={() => {
-              setFase("RECORDING");
-            }}
-          />
+          <Container
+            display="flex"
+            flexDirection="flex-row"
+            flexWrap="flex-nowrap"
+            gap="gap-10"
+          >
+            <Button
+              font={{ color: "text-white", weight: "font-semibold" }}
+              text="Iniciar Grabación"
+              remixicon="ri-mic-line"
+              onClick={() => {
+                setFase("RECORDING");
+              }}
+            />
+            <Button
+              onClick={handleClickUploadAudio}
+              font={{ color: "text-white", weight: "font-semibold" }}
+              text="Subir Audio"
+              remixicon="ri-upload-2-line"
+            />
+            <input
+              onChange={handleChangeInputAudio}
+              ref={fileInput}
+              type="file"
+              className="hidden"
+            />
+          </Container>
         )}
         {fase === "CREATED" && (
           <Button

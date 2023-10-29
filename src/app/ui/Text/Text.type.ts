@@ -1,4 +1,4 @@
-import { HTMLAttributes } from "react";
+import { HTMLAttributes, ReactNode } from "react";
 import {
   DisplayType,
   FontType,
@@ -12,5 +12,6 @@ export interface TextProps extends HTMLAttributes<HTMLParagraphElement> {
   text?: string;
   size?: SizeType;
   display?: DisplayType;
+  children?: ReactNode;
   separator?: SeparatorType;
 }

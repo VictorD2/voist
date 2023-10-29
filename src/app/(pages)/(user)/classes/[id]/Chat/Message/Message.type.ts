@@ -1,5 +1,11 @@
+import { FontType, SizeType } from "@/app/styles/types";
+
 export type MessageProps = {
   content: string;
-  createdAt: Date;
+  createdAt?: string;
+  fontAnswer?: FontType;
+  fontQuestion?: FontType;
+  size?: SizeType;
+  className?: string;
   isUserMessage: boolean;
 };

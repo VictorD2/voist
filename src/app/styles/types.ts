@@ -449,7 +449,11 @@ export type FontWeightType =
   | "font-extrabold"
   | "font-black";
 
-export type FontFamilyType = "font-sans" | "font-serif" | "font-mono";
+export type FontFamilyType =
+  | "font-sans"
+  | "font-serif"
+  | "font-mono"
+  | (string & {});
 
 export type FontSizeType =
   | "text-xs"

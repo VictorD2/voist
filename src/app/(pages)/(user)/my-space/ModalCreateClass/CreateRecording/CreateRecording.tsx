@@ -1,9 +1,11 @@
+"use client";
 import { FC, useState } from "react";
 import { ReactMic, ReactMicStopEvent } from "react-mic";
 import { CreateRecordingProps } from "./CreateRecording.type";
 import Container from "@/app/ui/Container";
 import Button from "@/app/ui/Button";
 import Text from "@/app/ui/Text";
+import { toast } from "react-toastify";
 
 const CreateRecording: FC<CreateRecordingProps> = (props) => {
   const { audioName = "", getAudio } = props;
@@ -14,7 +16,7 @@ const CreateRecording: FC<CreateRecordingProps> = (props) => {
   const [stateRecording, setStateRecording] =
     useState<StateRecordingType>("INIT");
 
-  const handleChangeRecording = () => {
+  const handleChangeRecording = async () => {
     setIsRecording(true);
     setStateRecording("RECORDING");
   };
@@ -29,8 +31,7 @@ const CreateRecording: FC<CreateRecordingProps> = (props) => {
     if (getAudio && audioChunks) getAudio(audioChunks);
   };
 
-  const onData = (recordedBlob: Blob) => {
-  };
+  const onData = (recordedBlob: Blob) => {};
 
   const onStop = (recordedBlob: ReactMicStopEvent) => {
     setAudioChunks(recordedBlob.blob);
@@ -66,7 +67,7 @@ const CreateRecording: FC<CreateRecordingProps> = (props) => {
             visualSetting="sinewave"
             onStop={onStop}
             onData={onData}
-            mimeType="audio/webm"
+            mimeType="audio/wav"
             strokeColor="#5271FF"
             backgroundColor="#FFF"
           />

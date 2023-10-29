@@ -31,7 +31,7 @@ const Header = () => {
       position="sticky"
       display="flex"
       bgColor="bg-white"
-      className="top-0"
+      className="top-0 z-50"
       as="header"
       size={{
         height: `h-[100px]`,
@@ -55,7 +55,7 @@ const Header = () => {
         />
       </Container>
 
-      <Container onClick={GoToRoot} className="cursor-pointer">
+      <Container onClick={GoToRoot} className="cursor-pointer" separator={{padding:"pl-10"}}>
         <Image
           height={logo.height}
           width={logo.width}
@@ -138,8 +138,11 @@ const Header = () => {
                 textTransform: "uppercase",
                 color: "text-white",
                 weight: "font-semibold",
+                whiteSpace: "whitespace-nowrap",
               }}
-              size={{ width: "" }}
+              separator={{
+                padding: "p-5",
+              }}
               text={isAuthenticated ? "Ir a mi cuenta" : "Iniciar sesión"}
               rounded="rounded-2xl"
             />

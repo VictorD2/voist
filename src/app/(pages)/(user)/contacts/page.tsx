@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { NextPage } from "next";
 import ClickOutSideComponent from "@/app/shared/hooks/useClickOutside";
-import { getUserService } from "@/app/shared/services/user.services";
+import { getAllContactsService } from "@/app/shared/services/contact.service";
 import { getErrorResponse } from "@/app/shared/utils/helpers";
 import { UserType } from "@/app/shared/types/user.type";
 import Breadcrumbs from "@/app/ui/Breadcrumbs";
@@ -21,15 +21,20 @@ import {
   ContactApiResponse,
   createContactService,
   deleteContactService,
-  getContactService,
+  getMyContactService,
 } from "@/app/shared/services/contact.service";
 
 const ContactsPage: NextPage = () => {
-  const [contacts, setContacts] = useState<Array<UserType>>([]);
-  const [contactSelected, setContactSelected] = useState<UserType>();
+  const [contacts, setContacts] = useState<
+    Array<Omit<UserType, "roleId" | "state">>
+  >([]);
+  const [contactSelected, setContactSelected] =
+    useState<Omit<UserType, "roleId" | "state">>();
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
 
-  const [contactsSearch, setContactsSearch] = useState<Array<UserType>>([]);
+  const [contactsSearch, setContactsSearch] = useState<
+    Array<Omit<UserType, "roleId" | "state">>
+  >([]);
   const [showListSearch, setShowListSearch] = useState<boolean>(false);
   const [isLoadedSearch, setIsLoadedSearch] = useState<boolean>(false);
   const [isLoadingSearch, setIsLoadingSearch] = useState<boolean>(false);
@@ -47,7 +52,7 @@ const ContactsPage: NextPage = () => {
       }
       if (e.target.value.length >= 3 && !isLoadedSearch) {
         setIsLoadingSearch(true);
-        const { data } = await getUserService(e.target.value);
+        const { data } = await getAllContactsService(e.target.value);
         setIsLoadingSearch(false);
         setContactsSearch(data);
         setIsLoadedSearch(true);
@@ -106,7 +111,7 @@ const ContactsPage: NextPage = () => {
   const { refetch } = useQuery<any>(
     "GET-CONTACTS",
     async () => {
-      return await getContactService();
+      return await getMyContactService();
     },
     {
       onSuccess: ({ data }) => {
@@ -121,7 +126,7 @@ const ContactsPage: NextPage = () => {
     return () => {};
   }, []);
 
-  const handleClickOption = (user: UserType) => {
+  const handleClickOption = (user: Omit<UserType, "roleId" | "state">) => {
     setShowListSearch(false);
     createContactMutate(user.id);
   };
@@ -177,7 +182,7 @@ const ContactsPage: NextPage = () => {
             />
             {/* Lista de busqueda */}
             {showListSearch && (
-              <List<UserType & { fullname: string }>
+              <List<Omit<UserType, "roleId" | "state"> & { fullname: string }>
                 className="absolute z-20"
                 isLoading={isLoadingSearch}
                 size={{
