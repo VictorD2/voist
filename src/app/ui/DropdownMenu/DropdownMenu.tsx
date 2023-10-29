@@ -27,8 +27,8 @@ const DropdownMenu: FC<DropdownMenuProps> = (props) => {
     const botonRect = e.currentTarget.getBoundingClientRect();
     // Determina si el dropdown se encuentra cerca del borde derecho o izquierdo de la pantalla.
     // if (!dropdown.current) return;
-    const isNearRightEdge = window.innerWidth - botonRect.right < 400;
-    const isNearLeftEdge = botonRect.left < 400;
+    const isNearRightEdge = window.innerWidth - botonRect.right < 100;
+    const isNearLeftEdge = botonRect.left < 100;
     setOutOfWindowRight(isNearRightEdge);
     setOutOfWindowLeft(isNearLeftEdge);
     // Calcula las nuevas coordenadas para el dropdown.

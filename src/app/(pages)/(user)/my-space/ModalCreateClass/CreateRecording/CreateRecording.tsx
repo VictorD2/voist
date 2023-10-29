@@ -185,7 +185,7 @@ const CreateRecording: FC<CreateRecordingProps> = (props) => {
           justify="justify-center"
           align="items-center"
         >
-          <canvas className="w-full h-32 bg-primary" ref={canvasRef}></canvas>
+          <canvas className="w-full h-32" ref={canvasRef}></canvas>
         </Container>
       </Container>
       <Container

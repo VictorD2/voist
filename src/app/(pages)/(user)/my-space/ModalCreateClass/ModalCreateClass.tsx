@@ -293,10 +293,14 @@ const ModalCreateClass: FC<ModalCreateClassType> = (props) => {
             display="flex"
             flexDirection="flex-row"
             flexWrap="flex-nowrap"
-            gap="gap-10"
+            gap="md:gap-10 gap-2"
           >
             <Button
-              font={{ color: "text-white", weight: "font-semibold" }}
+              font={{
+                color: "text-white",
+                weight: "font-semibold",
+                whiteSpace: "whitespace-nowrap",
+              }}
               text="Iniciar Grabación"
               remixicon="ri-mic-line"
               onClick={() => {
@@ -305,7 +309,11 @@ const ModalCreateClass: FC<ModalCreateClassType> = (props) => {
             />
             <Button
               onClick={handleClickUploadAudio}
-              font={{ color: "text-white", weight: "font-semibold" }}
+              font={{
+                color: "text-white",
+                weight: "font-semibold",
+                whiteSpace: "whitespace-nowrap",
+              }}
               text="Subir Audio"
               remixicon="ri-upload-2-line"
             />
