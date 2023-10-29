@@ -22,7 +22,6 @@ const Breadcrumbs: FC<BreadcrumbsProps> = (props) => {
     <Container
       align="items-center"
       size={{ width: "w-full" }}
-      separator={{ padding: "px-[20px]" }}
       justify="justify-start"
       display="flex"
       flexDirection="flex-row"

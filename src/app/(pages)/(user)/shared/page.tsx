@@ -20,21 +20,6 @@ const SharedPage: NextPage = () => {
         display="flex"
         gap="gap-5"
       >
-        {/* Search */}
-        <Container
-          separator={{ padding: "p-1" }}
-          size={{ width: "w-full" }}
-          flexDirection="flex-row"
-          justify="justify-center"
-          display="flex"
-        >
-          <InputText
-            placeholder="Buscar..."
-            size={{ width: "lg:w-5/12 md:w-7/12 w-full" }}
-            responsiveIcon="ri-search-line"
-          />
-        </Container>
-
         {/* Title */}
         <Breadcrumbs
           routes={[{ link: paths.shared, name: "Compartidos conmigo" }]}
@@ -43,21 +28,13 @@ const SharedPage: NextPage = () => {
 
       {/* Actions */}
       <Container
-        separator={{ margin: "mt-10" }}
+        separator={{ margin: "mt-10", padding: "" }}
         size={{ width: "w-full" }}
         flexDirection="flex-row"
         flexWrap="flex-nowrap"
         display="flex"
         gap="gap-4"
       >
-        <Button
-          border={{ size: "border", color: "border-gray-200" }}
-          remixicon="ri-filter-line"
-          text="Añadir filtros"
-          size={{ width: "" }}
-          bgColor="bg-white"
-          ripples={false}
-        />
         <Button
           border={{ size: "border", color: "border-gray-200" }}
           text="Ordenar por más recientes"
@@ -70,13 +47,18 @@ const SharedPage: NextPage = () => {
             setIsActived((state) => !state);
           }}
         />
+        <InputText
+          placeholder="Buscar..."
+          size={{ width: "lg:w-5/12 md:w-7/12 w-full" }}
+          responsiveIcon="ri-search-line"
+        />
       </Container>
 
       {/* List */}
       <Container
         separator={{ margin: "mt-10" }}
         flexDirection="flex-row"
-        justify="justify-evenly"
+        justify="justify-between"
         flexWrap="flex-wrap"
         display="flex"
         gap="gap-10"

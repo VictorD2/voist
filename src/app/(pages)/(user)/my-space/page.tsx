@@ -21,21 +21,6 @@ const MySpacePage: NextPage = () => {
         flexDirection="flex-col"
         gap="gap-5"
       >
-        {/* Search */}
-        <Container
-          size={{ width: "w-full" }}
-          display="flex"
-          flexDirection="flex-row"
-          justify="justify-center"
-          separator={{ padding: "p-1" }}
-        >
-          <InputText
-            placeholder="Buscar..."
-            size={{ width: "lg:w-5/12 md:w-7/12 w-full" }}
-            responsiveIcon="ri-search-line"
-          />
-        </Container>
-
         {/* Title */}
         <Breadcrumbs routes={[{ link: paths.mySpace, name: "Mi unidad" }]} />
       </Container>
@@ -51,25 +36,6 @@ const MySpacePage: NextPage = () => {
       >
         <Button
           ripples={false}
-          text="Nuevo"
-          remixicon="ri-add-line"
-          size={{ width: "" }}
-          font={{ color: "group-hover:text-white text-black" }}
-          transition
-          className="group"
-          bgColor="bg-white hover:bg-primary"
-          border={{ size: "border", color: "border-gray-200" }}
-        />
-        <Button
-          ripples={false}
-          size={{ width: "" }}
-          text="Añadir filtros"
-          remixicon="ri-filter-line"
-          bgColor="bg-white"
-          border={{ size: "border", color: "border-gray-200" }}
-        />
-        <Button
-          ripples={false}
           text="Ordenar por más recientes"
           size={{ width: "" }}
           toggle={isActived}
@@ -80,6 +46,11 @@ const MySpacePage: NextPage = () => {
           bgColor="bg-white"
           border={{ size: "border", color: "border-gray-200" }}
         />
+        <InputText
+          placeholder="Buscar..."
+          size={{ width: "lg:w-5/12 md:w-7/12 w-full" }}
+          responsiveIcon="ri-search-line"
+        />
       </Container>
 
       {/* List */}
@@ -88,7 +59,7 @@ const MySpacePage: NextPage = () => {
         display="flex"
         flexDirection="flex-row"
         flexWrap="flex-wrap"
-        justify="justify-evenly"
+        justify="justify-between"
         gap="gap-10"
       >
         {folderFileList.map((item) => {

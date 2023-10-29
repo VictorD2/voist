@@ -143,20 +143,6 @@ const ContactsPage: NextPage = () => {
         flexDirection="flex-col"
         gap="gap-5"
       >
-        {/* Search */}
-        <Container
-          size={{ width: "w-full" }}
-          display="flex"
-          flexDirection="flex-row"
-          justify="justify-center"
-          separator={{ padding: "p-1" }}
-        >
-          <InputText
-            placeholder="Buscar..."
-            size={{ width: "lg:w-5/12 md:w-7/12 w-full" }}
-            responsiveIcon="ri-search-line"
-          />
-        </Container>
 
         {/* Title */}
         <Breadcrumbs
