@@ -317,7 +317,10 @@ const ClassesPage: NextPage = () => {
   }, [params.get("folder")]);
 
   // Submit form folder modal
-  const onSubmitFolder = (folder: FolderType, contacts: Array<Omit<UserType, "role" | "roleId" | "state">>) => {
+  const onSubmitFolder = (
+    folder: FolderType,
+    contacts: Array<Omit<UserType, "role" | "roleId" | "state">>
+  ) => {
     folderSelected
       ? editFolderMutate({ ...folder, contacts })
       : createFolderMutate({ ...folder, contacts });
@@ -408,19 +411,6 @@ const ClassesPage: NextPage = () => {
         gap="gap-5"
       >
         {/* Search */}
-        <Container
-          size={{ width: "w-full" }}
-          display="flex"
-          flexDirection="flex-row"
-          justify="justify-center"
-          separator={{ padding: "p-1" }}
-        >
-          <InputText
-            placeholder="Buscar..."
-            size={{ width: "lg:w-5/12 md:w-7/12 w-full" }}
-            responsiveIcon="ri-search-line"
-          />
-        </Container>
 
         {/* Breadcrumbs */}
         <Breadcrumbs
@@ -490,12 +480,17 @@ const ClassesPage: NextPage = () => {
             setIsActived((state) => !state);
           }}
         />
+        <InputText
+          placeholder="Buscar..."
+          size={{ width: "lg:w-5/12 md:w-7/12 w-full" }}
+          responsiveIcon="ri-search-line"
+        />
       </Container>
 
       {/* List */}
       <Container
         separator={{ margin: "mt-10" }}
-        justify="justify-evenly"
+        justify="justify-between"
         flexDirection="flex-row"
         flexWrap="flex-wrap"
         display="flex"
