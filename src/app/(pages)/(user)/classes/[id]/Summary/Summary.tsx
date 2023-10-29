@@ -1,3 +1,4 @@
+"use client";
 import { FC } from "react";
 import { SummaryProps } from "./Summary.type";
 import Container from "@/app/ui/Container";

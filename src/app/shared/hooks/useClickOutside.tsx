@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+"use client";
 import React, { ReactNode, useEffect, useRef } from "react";
 
 interface Props {

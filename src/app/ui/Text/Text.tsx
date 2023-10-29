@@ -1,3 +1,4 @@
+"use client";
 import { classNames, mergeObjects } from "@/app/shared/utils/helpers";
 import { TextProps } from "./Text.type";
 import { defaultFont, defaultSeparator, defaultSize } from "./Text.default";

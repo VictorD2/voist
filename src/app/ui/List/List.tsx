@@ -1,3 +1,4 @@
+"use client";
 import { classNames, mergeObjects } from "@/app/shared/utils/helpers";
 import { defaultFont, defaultSeparator } from "./List.default";
 import { ListProps } from "./List.type";

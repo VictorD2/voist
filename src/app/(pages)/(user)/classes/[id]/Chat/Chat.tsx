@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+"use client";
 import { FC, useEffect, useState } from "react";
 import Container from "@/app/ui/Container";
 import InputText from "@/app/ui/InputText";

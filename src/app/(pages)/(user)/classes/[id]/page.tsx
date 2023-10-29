@@ -22,7 +22,6 @@ import { ClassType } from "@/app/shared/types/class.type";
 import { UserType } from "@/app/shared/types/user.type";
 import Adjuntos from "./Adjuntos";
 import { AxiosResponse } from "axios";
-import { getErrorResponse } from "@/app/shared/utils/helpers";
 
 const ClassPage: NextPage = () => {
   const params = useParams();

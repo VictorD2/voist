@@ -1,3 +1,4 @@
+"use client";
 import { ClassType } from "@/app/shared/types/class.type";
 import { UserType } from "@/app/shared/types/user.type";
 

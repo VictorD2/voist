@@ -1,3 +1,4 @@
+"use client";
 import { classNames } from "@/app/shared/utils/helpers";
 import { ContainerProps } from "./Container.type";
 

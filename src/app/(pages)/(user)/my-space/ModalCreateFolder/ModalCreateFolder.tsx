@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+"use client";
 import { Controller, useForm } from "react-hook-form";
 import { FC, useEffect, useState } from "react";
 import { useQuery } from "react-query";

@@ -1,3 +1,4 @@
+"use client";
 import { TranscriptionProps } from "./Transcription.type";
 import { FC } from "react";
 

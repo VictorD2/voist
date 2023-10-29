@@ -1,3 +1,4 @@
+"use client";
 import { Menu, Transition } from "@headlessui/react";
 import { FC, Fragment, useRef, useState } from "react";
 import { classNames, mergeObjects } from "@/app/shared/utils/helpers";

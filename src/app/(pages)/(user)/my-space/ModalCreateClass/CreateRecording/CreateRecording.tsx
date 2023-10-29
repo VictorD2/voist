@@ -5,7 +5,6 @@ import { CreateRecordingProps } from "./CreateRecording.type";
 import Container from "@/app/ui/Container";
 import Button from "@/app/ui/Button";
 import Text from "@/app/ui/Text";
-import { toast } from "react-toastify";
 
 const CreateRecording: FC<CreateRecordingProps> = (props) => {
   const { audioName = "", getAudio } = props;
@@ -61,7 +60,7 @@ const CreateRecording: FC<CreateRecordingProps> = (props) => {
           justify="justify-center"
           align="items-center"
         >
-          <ReactMic
+          {/* <ReactMic
             record={isRecording}
             className="sound-wave"
             visualSetting="sinewave"
@@ -70,7 +69,7 @@ const CreateRecording: FC<CreateRecordingProps> = (props) => {
             mimeType="audio/wav"
             strokeColor="#5271FF"
             backgroundColor="#FFF"
-          />
+          /> */}
         </Container>
       </Container>
       <Container

@@ -1,3 +1,4 @@
+"use client";
 import { FC } from "react";
 import { ContactSharedProps } from "./ContactShared.type";
 import Container from "@/app/ui/Container";

@@ -1,3 +1,4 @@
+"use client";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useRef } from "react";
 import { classNames } from "../../shared/utils/helpers";

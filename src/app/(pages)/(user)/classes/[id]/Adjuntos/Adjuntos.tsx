@@ -1,3 +1,4 @@
+"use client";
 const Adjuntos = () => {
   return <div>Adjuntos</div>;
 };
