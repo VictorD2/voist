@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { io } from "socket.io-client";
 import { FC, useEffect } from "react";
