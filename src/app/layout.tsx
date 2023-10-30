@@ -6,15 +6,15 @@ import "remixicon/fonts/remixicon.css";
 import "./styles/globals.css";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ToastContainer } from "react-toastify";
-import { Quicksand } from "next/font/google";
+// import { Quicksand } from "next/font/google";
 import { GlobalProvider } from "./shared/contexts/GlobalProvider";
 import Container from "./ui/Container";
 
 // If loading a variable font, you don't need to specify the font weight
-const inter = Quicksand({
-  subsets: ["latin"],
-  display: "swap",
-});
+// const inter = Quicksand({
+//   subsets: ["latin"],
+//   display: "swap",
+// });
 
 export default function RootLayout({
   children,
@@ -36,7 +36,7 @@ export default function RootLayout({
     <html lang="es">
       <QueryClientProvider client={queryClient}>
         <GlobalProvider>
-          <Container as="body" className={inter.className}>
+          <Container as="body" >
             <ToastContainer />
             {children}
           </Container>

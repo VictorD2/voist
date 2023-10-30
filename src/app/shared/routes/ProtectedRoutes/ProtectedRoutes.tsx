@@ -6,6 +6,7 @@ import { useGlobalContext } from "../../contexts/GlobalProvider";
 import Loading from "../../components/Loading";
 import Redirect from "../Redirect";
 import paths from "../paths";
+import WebSocketComponent from "../../components/WebSocketComponent";
 
 const ProtectedRoutes = ({
   children,
@@ -23,7 +24,7 @@ const ProtectedRoutes = ({
 
   if (!isAuthenticated) return <Redirect to={paths.login} />;
 
-  return <>{children}</>;
+  return <WebSocketComponent>{children}</WebSocketComponent>;
 };
 
 export default ProtectedRoutes;
