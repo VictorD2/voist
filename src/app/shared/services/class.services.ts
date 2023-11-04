@@ -18,12 +18,29 @@ export type ClassesApiResponse = AxiosResponse<
   Array<ClassType & { contacts: Array<UserType> }>
 >;
 
+export type ClassesCountMonthApiResponse = AxiosResponse<
+  Array<{ month: string; count: number }>,
+  Array<{ month: string; count: number }>
+>;
+export type ClassesCountApiResponse = AxiosResponse<number, number>;
+
 // Service Get Classs
 export const getClassesService = async (
   folderId: number | null
 ): Promise<ClassesApiResponse> => {
   return axios.get(`${api}?folder=${folderId}`);
 };
+
+// Service Get Classs
+export const getClassCountService =
+  async (): Promise<ClassesCountApiResponse> => {
+    return axios.get(`${api}/count`);
+  };
+// Service Get Classs
+export const getClassCountPerMonthService =
+  async (): Promise<ClassesCountMonthApiResponse> => {
+    return axios.get(`${api}/countPerMonth`);
+  };
 
 // Service Get Classs
 export const getClassService = async (

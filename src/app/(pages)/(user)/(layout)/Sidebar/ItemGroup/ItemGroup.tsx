@@ -3,9 +3,15 @@ import Container from "@/app/ui/Container";
 import Item from "./Item/Item";
 import { ItemGroupProps } from "./ItemGroup.type";
 import { classNames } from "@/app/shared/utils/helpers";
+import { useGlobalContext } from "@/app/shared/contexts/GlobalProvider";
 
 const ItemGroup: FC<ItemGroupProps> = (props) => {
   const { expand, items, separator, setExpand } = props;
+  const {
+    user: {
+      user: { role },
+    },
+  } = useGlobalContext();
   return (
     <Container
       size={{ width: "w-full" }}
@@ -32,20 +38,21 @@ const ItemGroup: FC<ItemGroupProps> = (props) => {
         {separator}
       </Container>
       {items.map(({ slug, link, remixicon, children, code }) => {
-        return (
-          <Item
-            first
-            code={code}
-            textColor="text-black"
-            expand={expand}
-            setExpand={setExpand}
-            key={slug}
-            slug={slug}
-            remixicon={remixicon}
-            link={link}
-            sons={children}
-          />
-        );
+        if (role?.permissions.includes(code + ""))
+          return (
+            <Item
+              first
+              code={code}
+              textColor="text-black"
+              expand={expand}
+              setExpand={setExpand}
+              key={slug}
+              slug={slug}
+              remixicon={remixicon}
+              link={link}
+              sons={children}
+            />
+          );
       })}
     </Container>
   );

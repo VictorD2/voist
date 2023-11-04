@@ -22,6 +22,7 @@ import { ClassType } from "@/app/shared/types/class.type";
 import { UserType } from "@/app/shared/types/user.type";
 import Adjuntos from "./Adjuntos";
 import { AxiosResponse } from "axios";
+import ProtectedRoutes from "@/app/shared/routes/ProtectedRoutes";
 
 const ClassPage: NextPage = () => {
   const params = useParams();
@@ -112,7 +113,7 @@ const ClassPage: NextPage = () => {
   }
 
   return (
-    <Container>
+    <ProtectedRoutes code="P02">
       <Container
         separator={{ margin: "mb-10" }}
         size={{ width: "w-full" }}
@@ -335,7 +336,7 @@ const ClassPage: NextPage = () => {
           )}
         </Container>
       </Container>
-    </Container>
+    </ProtectedRoutes>
   );
 };
 

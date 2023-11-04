@@ -1,16 +1,17 @@
 "use client";
 import { ReactNode, useState } from "react";
-import ProtectedRoutes from "@/app/shared/routes/ProtectedRoutes";
 import { classNames } from "@/app/shared/utils/helpers";
 import Container from "@/app/ui/Container";
 import Sidebar from "./(layout)/Sidebar";
 import Header from "./(layout)/Header";
+import { paths } from "@/app/shared/routes/paths.user";
+import WebSocketComponent from "@/app/shared/components/WebSocketComponent";
 
 const Layout = ({ children }: { children: ReactNode }) => {
   const [expand, setExpand] = useState(true);
 
   return (
-    <ProtectedRoutes>
+    <WebSocketComponent>
       <Container size={{ width: "w-full" }}>
         {/* LeftSide */}
         <Container
@@ -28,7 +29,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
             "group z-30"
           )}
         >
-          <Sidebar expand={expand} />
+          <Sidebar expand={expand} items={paths} />
         </Container>
 
         {/* RightSide */}
@@ -73,7 +74,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
           </Container>
         </Container>
       </Container>
-    </ProtectedRoutes>
+    </WebSocketComponent>
   );
 };
 

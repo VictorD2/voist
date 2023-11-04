@@ -11,4 +11,7 @@ export type UserType = {
     name: string;
     permissions: Array<string>;
   };
+  photo?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 };

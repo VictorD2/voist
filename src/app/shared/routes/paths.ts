@@ -11,4 +11,7 @@ export default {
   contacts: "/contacts",
   class: (id: string) => `/classes/${id}`,
   classFolder: (id: string) => `/classes?folder=${id}`,
+  adminHome: "/admin/home",
+  panelUsers: "/admin/users",
+  panelUsersId: (id: string) => `/admin/users/${id}`,
 };

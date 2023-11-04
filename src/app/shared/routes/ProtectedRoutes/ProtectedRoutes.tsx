@@ -6,11 +6,10 @@ import { useGlobalContext } from "../../contexts/GlobalProvider";
 import Loading from "../../components/Loading";
 import Redirect from "../Redirect";
 import paths from "../paths";
-import WebSocketComponent from "../../components/WebSocketComponent";
 
 const ProtectedRoutes = ({
   children,
-  code,
+  code = "",
 }: {
   children: ReactNode;
   code?: string;
@@ -18,13 +17,17 @@ const ProtectedRoutes = ({
   const {
     auth: { isAuthenticated },
     loading: { isLoading },
+    user: { user },
   } = useGlobalContext();
 
   if (isLoading) return <Loading />;
 
   if (!isAuthenticated) return <Redirect to={paths.login} />;
 
-  return <WebSocketComponent>{children}</WebSocketComponent>;
+  if (code.length !== 0 && !user.role?.permissions.includes(code)) {
+    return <Redirect to={paths.root} />;
+  }
+  return <>{children}</>;
 };
 
 export default ProtectedRoutes;

@@ -8,12 +8,13 @@ import Breadcrumbs from "@/app/ui/Breadcrumbs";
 import Container from "@/app/ui/Container";
 import InputText from "@/app/ui/InputText";
 import Button from "@/app/ui/Button";
+import ProtectedRoutes from "@/app/shared/routes/ProtectedRoutes";
 
 const SharedPage: NextPage = () => {
   const [isActived, setIsActived] = useState<boolean>(false);
 
   return (
-    <>
+    <ProtectedRoutes code="P03">
       <Container
         size={{ width: "w-full" }}
         flexDirection="flex-col"
@@ -67,7 +68,7 @@ const SharedPage: NextPage = () => {
           return <FileFolder {...item} key={item.id + item.title} />;
         })}
       </Container>
-    </>
+    </ProtectedRoutes>
   );
 };
 

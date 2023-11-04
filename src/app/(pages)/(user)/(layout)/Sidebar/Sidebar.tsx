@@ -3,9 +3,7 @@
 
 import Image from "next/image";
 import logoCorto from "@/app/shared/assets/img/logo-corto.png";
-import { ItemGroupType } from "./ItemGroup/ItemGroup.type";
 import { classNames } from "@/app/shared/utils/helpers";
-import { paths } from "@/app/shared/routes/paths.user";
 import routes from "@/app/shared/routes/paths";
 import logo from "@/app/shared/assets/img/logo.png";
 import { SidebarProps } from "./Sidebar.type";
@@ -14,9 +12,7 @@ import styles from "./Sidebar.module.css";
 import ItemGroup from "./ItemGroup";
 import { useRouter } from "next/navigation";
 
-const navigation: Array<ItemGroupType> = paths;
-
-const Sidebar = ({ expand = true, setExpand }: SidebarProps) => {
+const Sidebar = ({ expand = true, setExpand, items = [] }: SidebarProps) => {
   const router = useRouter();
 
   const GoToRoot = () => router.push(routes.root);
@@ -106,7 +102,7 @@ const Sidebar = ({ expand = true, setExpand }: SidebarProps) => {
           }}
           className={classNames("overflow-y-auto", styles.sidebarScroll)}
         >
-          {navigation.map(({ separator, items }, index) => {
+          {items.map(({ separator, items }, index) => {
             return (
               <ItemGroup
                 setExpand={setExpand}

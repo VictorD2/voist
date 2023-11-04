@@ -11,11 +11,15 @@ const AuthRoutes = ({ children }: { children: ReactNode }) => {
   const {
     loading: { isLoading },
     auth: { isAuthenticated },
+    user: { user },
   } = useGlobalContext();
 
   if (isLoading) return <Loading />;
 
-  if (isAuthenticated) return <Redirect to={paths.mySpace} />;
+  if (isAuthenticated) {
+    if (user.roleId === 2) return <Redirect to={paths.adminHome} />;
+    return <Redirect to={paths.mySpace} />;
+  }
 
   return <>{children}</>;
 };

@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import Loading from "../../components/Loading";
 
 const Redirect = ({ to }: { to: string }) => {
   const router = useRouter();
@@ -10,7 +11,7 @@ const Redirect = ({ to }: { to: string }) => {
     router.push(to);
   }, [router, to]);
 
-  return null;
+  return <Loading />;
 };
 
 export default Redirect;

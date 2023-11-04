@@ -9,12 +9,13 @@ import Container from "@/app/ui/Container";
 import InputText from "@/app/ui/InputText";
 import FileFolder from "./FileFolder";
 import Button from "@/app/ui/Button";
+import ProtectedRoutes from "@/app/shared/routes/ProtectedRoutes";
 
 const MySpacePage: NextPage = () => {
   const [isActived, setIsActived] = useState<boolean>(false);
 
   return (
-    <>
+    <ProtectedRoutes code="P01">
       <Container
         size={{ width: "w-full" }}
         display="flex"
@@ -66,7 +67,7 @@ const MySpacePage: NextPage = () => {
           return <FileFolder {...item} key={item.id + item.title} />;
         })}
       </Container>
-    </>
+    </ProtectedRoutes>
   );
 };
 

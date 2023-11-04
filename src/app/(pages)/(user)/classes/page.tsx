@@ -41,6 +41,7 @@ import {
   getClassesService,
   updateClassService,
 } from "@/app/shared/services/class.services";
+import ProtectedRoutes from "@/app/shared/routes/ProtectedRoutes";
 
 interface Link {
   name: string;
@@ -403,7 +404,7 @@ const ClassesPage: NextPage = () => {
   };
 
   return (
-    <>
+    <ProtectedRoutes code="P02">
       <Container
         size={{ width: "w-full" }}
         display="flex"
@@ -649,7 +650,7 @@ const ClassesPage: NextPage = () => {
         type="primary"
         message=""
       />
-    </>
+    </ProtectedRoutes>
   );
 };
 

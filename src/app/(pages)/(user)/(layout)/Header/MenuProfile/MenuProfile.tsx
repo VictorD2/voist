@@ -59,12 +59,10 @@ const MenuProfile = () => {
       positionAbs="right-0"
       buttonNode={
         <>
-          <Image
-            className="inline-block h-12 w-12 rounded-full ring-2 ring-primary"
-            src={photoProfile.src}
+          <img
+            className="inline-block h-8 w-8 rounded-full ring-2 ring-primary"
+            src={user.photo + ""}
             alt="Profile Photo"
-            width={photoProfile.width}
-            height={photoProfile.height}
           />
           <Text
             text={user.name + " " + user.lastname}

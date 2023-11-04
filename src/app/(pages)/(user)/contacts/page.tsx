@@ -23,6 +23,7 @@ import {
   deleteContactService,
   getMyContactService,
 } from "@/app/shared/services/contact.service";
+import ProtectedRoutes from "@/app/shared/routes/ProtectedRoutes";
 
 const ContactsPage: NextPage = () => {
   const [contacts, setContacts] = useState<
@@ -136,7 +137,7 @@ const ContactsPage: NextPage = () => {
   };
 
   return (
-    <>
+    <ProtectedRoutes code="P04">
       <Container
         size={{ width: "w-full" }}
         display="flex"
@@ -228,7 +229,7 @@ const ContactsPage: NextPage = () => {
         setOpen={setShowConfirm}
         type="primary"
       />
-    </>
+    </ProtectedRoutes>
   );
 };
 
